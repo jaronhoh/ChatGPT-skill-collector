@@ -1,7 +1,7 @@
 ---
 name: codex-with-chatgpt-chatgpt-side
 description: 在 ChatGPT Project 中配合 Codex with ChatGPT (C2C) 项目，作为编码任务的规划、问题分析和独立审查端；通过已授权的只读工作区连接读取源码、差异与测试证据，交由 Codex 执行修改。
-version: '1.1'
+version: '1.2'
 created: '2026-10-18'
 source: '用户上传的 codex-with-chatgpt-main.zip：skill/SKILL.md、README.md、README.zh-CN.md'
 updated: '2026-11-05'
@@ -13,13 +13,26 @@ updated: '2026-11-05'
 >
 > 本文件是适用于 **ChatGPT Project** 的单文件协作指引，不是原仓库 Codex 端 `skill/SKILL.md` 的安装替代品，也不包含 Bridge 可执行程序。
 
+## 强制执行模式：Chat 开发，Work 仅用于 ChatGPT Sites 部署（2026-11-05）
+
+> **最高优先级项目工作流约束：所有开发工作必须始终在 ChatGPT 普通 Chat 模式进行。ChatGPT Work 只允许用于 ChatGPT Sites 的实际部署、发布以及与该次部署直接相关的发布后验证；不得用于需求分析、PM/PRD、系统设计、UI 设计、编写/修改代码、修复 Bug、测试、代码审查、GitHub 提交或合并。** 本规则覆盖本文件中任何较宽松的“Chat First”“必要时 Work 开发/测试”“Work 可处理浏览器或本地代码”表述。
+
+- **Chat 阶段**：需求、设计、开发、调试、测试、回归、GitHub 同步及审核全部在普通 Chat 完成。可以在 Chat 中使用当前授权的工具和连接器；Codex 等独立开发执行端若需配合，也必须由 Chat 主导，不把开发任务交给 Work。
+- **能力不足时**：在 Chat 中如实说明无法执行的操作、缺失证据和阻碍，继续寻求 Chat 可用的工具或请求用户提供环境；**不得以工具不足为理由改用 Work 开发或测试**，不得把未执行的测试写成通过。
+- **唯一 Work 入口**：仅在源码已准备、必要测试完成且用户明确要求部署/更新 ChatGPT Sites 时，交给 Work **最小部署范围**：定位原 Site → 同步已验证的 GitHub 源码/构建产物 → 保存/发布 → 检查发布后实际运行。Work 不得重新设计、开发、修复功能或替代 Chat 完成预发布测试。
+- **部署遇阻**：如果 Work 发现需要代码修改或修复，停止该部分并把问题返回 Chat；Chat 修复和验证后，才重新启动部署。若 Sites 工具不可用，如实报告，不假装发布成功。
+- **不需要部署**：任务终点只是设计、代码、GitHub 更新或用户确认无需发布时，整个流程都不进入 Work。
+- **状态分离**：Chat 开发完成、GitHub 提交、CI、Sites 发布及生产验证必须分别有证据；GitHub Commit/Merge 不等于 Sites 部署。
+
+**固定流程：PM Make → PRD Make → 系统/UI 设计 → Chat 开发 → Chat 测试 → Chat GitHub 更新与核验 → [用户要求部署 Sites 时] Work 部署与发布验证。**
+
 ## 1. 适用场景与边界
 
 用户要求“使用 Codex with ChatGPT”“帮 Codex 规划”“检查 Codex 改动”“分析测试失败”“通过只读连接查看当前代码仓库”时使用。
 
 原始项目通过 Codex 端的本地 Bridge、OAuth 授权及只读 MCP 连接，让 ChatGPT 按需读取当前工作区；Codex 仍拥有编辑文件、运行 Shell、Git、测试和修复的执行权。**仅把本 MD 上传到 ChatGPT Project 不会自动建立 MCP 连接，也不会安装 C2C。**
 
-若当前会话存在已授权的 C2C 连接器，优先使用它读取工作区。若没有，使用用户提供的文件、GitHub 连接器或项目文件作为替代输入，但必须明确说明这是**替代工作流，不等于 C2C 已连接**。若需要操作本地代码、终端或部署，应由 Codex 或具备相应能力的 ChatGPT Work 执行；不得虚构已执行动作。
+若当前会话存在已授权的 C2C 连接器，优先使用它读取工作区。若没有，使用用户提供的文件、GitHub 连接器或项目文件作为替代输入，但必须明确说明这是**替代工作流，不等于 C2C 已连接**。若需要操作本地代码、终端，应由 Chat 模式中的可用工具或 Codex 执行；仅 ChatGPT Sites 部署可交由 ChatGPT Work；不得虚构已执行动作。
 
 ## 2. 原始项目的角色分工
 
@@ -155,7 +168,7 @@ updated: '2026-11-05'
 - **ChatGPT Project**：保存本 Skill、项目说明、需求文件和会话上下文；上传 Skill 不等于运行 Codex Bridge。
 - **C2C 连接器**：如果已经由 Codex 端配置并授权，ChatGPT 可通过其只读工具读取当前工作区；不能通过该连接写入。
 - **GitHub 连接器**：可以在授权范围内查询仓库；若具备写入操作，其权限独立于 C2C，不能默认认为它等同本地工作区。
-- **ChatGPT Work**：适合用户明确要求的跨文件、代码实施、浏览器交互或部署任务；不应将 Work 操作伪装成 Codex 执行结果。
+- **ChatGPT Work**：仅用于用户明确要求的 ChatGPT Sites 部署与发布后验证，不用于跨文件开发、代码实施或预发布测试；不应将 Work 操作伪装成 Codex 执行结果。
 - **多设备/多会话**：以真实仓库、工作区连接、Commit 和测试记录为准，不仅依赖聊天记忆。
 
 原始 C2C 的会话模式包含 `long-chat` 与 `project`，由 Codex 端配置决定；ChatGPT 端不能凭本 Skill 自行改变或保证模式。

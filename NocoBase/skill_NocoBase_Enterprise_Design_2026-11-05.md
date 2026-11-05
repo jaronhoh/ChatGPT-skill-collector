@@ -1,7 +1,7 @@
 ---
 name: nocobase-enterprise-design
 description: 当用户规划、开发、迭代、测试或部署 NocoBase 3 企业应用时使用；将官方 Core-first、设计先行、Agent 规范、数据迁移、审批、权限和验收方法压缩为可执行规则。
-version: '1.0'
+version: '1.1'
 created: '2026-11-05'
 updated: '2026-11-05'
 language: zh-CN
@@ -63,6 +63,43 @@ scope: NocoBase 3 applications; not NocoBase 2
 保持 `AGENTS.md` 精简，把详细规则放进项目规则文件；不复制整套官方 Skills。官方 v3 源码仓库要求根 AGENTS.md 不超过 32 KB、细节由规则索引维护；**这是上游仓库约定，可借鉴，但不要未经检查强制套用到所有用户应用**。
 
 官方 v3 源码仓库的分支命名、changeset、PR 模板等规则属于**上游贡献流程**；用户应用遵循自身 GitHub 规范，不照搬上游特有 CI/发布政策。
+
+## 4A. 官方 Markdown 追踪规则（必读，不得止步于 AGENTS.md）
+
+**原则：索引不是正文。** 阅读官方 `AGENTS.md` 后，必须按当前任务继续打开其指向的 `.agents/rules/*.md`、实际应用的 `SKILL.md`，以及这些 Skill 指向的相关 `references/*.md`。不要求每次通读全部参考文件；要求**任务相关的引用链至少读到可执行规则**。链接不存在、版本不符或读取失败时标记未验证，禁止凭印象补齐。
+
+**先判定所在环境：**
+- **独立 NocoBase 3 App**：以该 App 自己的 `AGENTS.md`、`.agents/rules/`、`.agents/skills/nocobase-app-development/SKILL.md` 及其版本匹配的 references 为准；插件任务再读 `nocobase-app-plugin-development/SKILL.md`。检查 `client/runtime.ts`、`server/runtime.ts`、`config.example.yml`，以及实际 `package.json`、`client/plugins.ts`、`server/plugins.ts`、`cli/plugins.ts` 和 `database/`。不要要求独立 App 下载整个上游源码。
+- **NocoBase 3 上游源码仓库**：使用 `v3-develop/AGENTS.md` 及其索引的 `.agents/rules/`，并读取 `packages/app/app-skills/skills/` 中真正维护的 App/Plugin Skills。上游贡献者专用规则不能直接视为独立 App 的规则。
+- **NocoBase 2 或无法确定版本**：停止套用 v3 专属 CLI/API，先确认版本。
+
+**按任务读取的官方文档地图（路径相对 NocoBase `v3-develop` 根目录；独立 App 应改读安装版本同步后的对应路径）：**
+
+| 任务 | 必须继续阅读的 Markdown | 必须提炼的决策 |
+|---|---|---|
+| 创建应用/应用内业务功能 | `packages/app/app-skills/skills/nocobase-app-development/SKILL.md`；`references/frontend/ui-workflow.md` | 先检查实际插件、数据、端点和权限；区分快速修改、主题修改、完整设计流程 |
+| CLI、配置、迁移执行 | `packages/app/app-skills/skills/nocobase-app-development/references/cli.md` | 通过 `pnpm nocobase commands --json` 和命令 `--help` 查证可用命令；禁止猜旧版脚本；`db reset` 是破坏性操作 |
+| API 设计与授权 | `packages/app/app-skills/skills/nocobase-app-development/references/http-api.md`；`.agents/rules/http-api.md`（上游） | 统一路径/方法、请求验证、错误契约；鉴权在读取资源或写入前进行；文档化 API |
+| 插件创建与边界 | `packages/app/app-skills/skills/nocobase-app-plugin-development/SKILL.md`；`references/plugin-foundation.md`、`references/registration.md`；`.agents/rules/plugin-development.md`（上游） | App-local 与源码工作区插件不同；检查安装、注册和依赖；不要使用 NocoBase 2 插件协议 |
+| 服务端/异步任务 | 插件 Skill 的 `references/server.md`、`references/services.md`、`references/database.md` | Route、Service、Provider、Job、Schedule、Queue、Migration、Seed 各自负责不同边界 |
+| 数据库结构与迁移 | `.agents/rules/database-migrations.md`（上游）；当前 App/Plugin Skill 的数据库 references | 迁移自包含且不可修改已合并历史；schema 用 builder、迁移数据优先 query、seed 优先 repository；测试 up/down |
+| 测试与回归 | `.agents/rules/testing.md`（上游）；当前 App Skill 对应测试 references | 区分 client/server/database/浏览器测试；只测相关包及受影响消费者；数据库测试不硬编码 dialect |
+| 页面设计、组件、主题 | `references/frontend/design-contract.md`、`references/frontend/ui-guidelines.md`、`references/frontend/ui-workflow.md`、`references/frontend/ui-acceptance.md`、`references/frontend/references/theme.md`；插件另读 `references/ui-design.md` | 继承宿主设计、引用原始设计稿；根据复杂度选择流程；真实浏览器验收，不无故替换宿主主题 |
+| 上游模板/规则维护 | `.agents/rules/templates.md`、`.agents/rules/repository-layout-and-skills.md` | 上游两套模板的框架层变更需同步；生成的 Agent Skill 不直接手改；区分源码规则和独立 App |
+| 上游 PR/发布 | `.agents/rules/pull-requests-and-changesets.md`、`.agents/rules/workflows-and-release.md` | 仅在为 NocoBase 上游贡献代码时应用其 branch/changeset/PR/CI 规则 |
+
+**二级引用也必须按需追踪**：例如 `AGENTS.md` → `plugin-development.md` → Plugin `SKILL.md` → `references/server.md` → `references/services.md`；或 `AGENTS.md` → App `SKILL.md` → `references/frontend/ui-workflow.md` → `design-contract.md` / `ui-acceptance.md`。不把索引标题当作已读内容。
+
+**可执行技术细节（从上述原始 Markdown 核对）：**
+- 应用 CLI 是 `pnpm nocobase <topic> <command>`；`pnpm dev`、`pnpm build` 等是 npm scripts。先查询命令树和 `--help`，不能照搬旧文档中的别名。
+- NocoBase 3 插件使用版本匹配的 `defineServerPlugin` 等当前接口；不要回退到 NocoBase 2 的 `Plugin` 类、`src/client-v2/` 或 `nb scaffold plugin`。
+- HTTP API 的 `GET` 不得产生状态变化；插件路由有命名空间；统一成功与错误响应；授权在校验资源存在性与写入前执行。
+- 数据迁移与 seed 是不同职责；结构变化须确定性、可测试；修复已合并迁移时创建新迁移。
+- 插件的 Route 负责 HTTP 边界，Service 负责可复用业务逻辑，Provider 负责注册与生命周期；队列/任务处理器不应成为混杂所有业务逻辑的入口。
+- 前端按 Quick / Theme / Full 三种流程分流；只有复杂交互或跨模块设计需要完整设计评审，不为普通 CRUD 强制增加审批门槛。
+- 官方 `AGENTS.md` 对源码仓库的特殊规则（32KB 上限、PR 模板、changeset、同步模板）不自动套用于独立应用。
+
+**每次开发前输出一行来源核验：** `项目版本 / 环境类型 / 已读取的 AGENTS.md → Skill → references 路径 / 未读取或不适用的引用 / 版本风险`。没有实际打开的文件不能写作“已阅读”。
 
 ## 5. 按纵向功能切片交付
 
@@ -157,4 +194,4 @@ scope: NocoBase 3 applications; not NocoBase 2
 8. https://docs.nocobase.com/zh-CN/guides/deploy/
 9. https://github.com/nocobase/nocobase/blob/v3-develop/AGENTS.md
 
-本文件是对官方教程的**归纳与 ChatGPT 项目工作流适配**，不是官方 NocoBase Skill 或逐字翻译；任何实现细节以项目当前安装版本为准。
+**本次扩展追踪的上游文档入口：** https://github.com/nocobase/nocobase/tree/v3-develop/.agents/rules ；https://github.com/nocobase/nocobase/tree/v3-develop/packages/app/app-skills/skills 。这些链接为动态上游参考；实际执行仍须使用应用当前版本匹配的文件。\n\n本文件是对官方教程的**归纳与 ChatGPT 项目工作流适配**，不是官方 NocoBase Skill 或逐字翻译；任何实现细节以项目当前安装版本为准。

@@ -1,14 +1,27 @@
 ---
 name: prd-github-sites-update
 description: 用于更新既有 PRD、将已确认修改提交 GitHub，并生成完整的 ChatGPT Work 指令以更新现有 Sites；包含版本验证、交接、发布及状态追踪。
-version: '1.3'
+version: '1.4'
 created: '2026-10-16'
 updated: '2026-11-05'
 ---
 
 # PRD → GitHub → ChatGPT Work → Sites
 
-## 默认开发执行策略：ChatGPT Chat First（2026-10-24 更新）
+## 强制执行模式：Chat 开发，Work 仅用于 ChatGPT Sites 部署（2026-11-05）
+
+> **最高优先级项目工作流约束：所有开发工作必须始终在 ChatGPT 普通 Chat 模式进行。ChatGPT Work 只允许用于 ChatGPT Sites 的实际部署、发布以及与该次部署直接相关的发布后验证；不得用于需求分析、PM/PRD、系统设计、UI 设计、编写/修改代码、修复 Bug、测试、代码审查、GitHub 提交或合并。** 本规则覆盖本文件中任何较宽松的“Chat First”“必要时 Work 开发/测试”“Work 可处理浏览器或本地代码”表述。
+
+- **Chat 阶段**：需求、设计、开发、调试、测试、回归、GitHub 同步及审核全部在普通 Chat 完成。可以在 Chat 中使用当前授权的工具和连接器；Codex 等独立开发执行端若需配合，也必须由 Chat 主导，不把开发任务交给 Work。
+- **能力不足时**：在 Chat 中如实说明无法执行的操作、缺失证据和阻碍，继续寻求 Chat 可用的工具或请求用户提供环境；**不得以工具不足为理由改用 Work 开发或测试**，不得把未执行的测试写成通过。
+- **唯一 Work 入口**：仅在源码已准备、必要测试完成且用户明确要求部署/更新 ChatGPT Sites 时，交给 Work **最小部署范围**：定位原 Site → 同步已验证的 GitHub 源码/构建产物 → 保存/发布 → 检查发布后实际运行。Work 不得重新设计、开发、修复功能或替代 Chat 完成预发布测试。
+- **部署遇阻**：如果 Work 发现需要代码修改或修复，停止该部分并把问题返回 Chat；Chat 修复和验证后，才重新启动部署。若 Sites 工具不可用，如实报告，不假装发布成功。
+- **不需要部署**：任务终点只是设计、代码、GitHub 更新或用户确认无需发布时，整个流程都不进入 Work。
+- **状态分离**：Chat 开发完成、GitHub 提交、CI、Sites 发布及生产验证必须分别有证据；GitHub Commit/Merge 不等于 Sites 部署。
+
+**固定流程：PM Make → PRD Make → 系统/UI 设计 → Chat 开发 → Chat 测试 → Chat GitHub 更新与核验 → [用户要求部署 Sites 时] Work 部署与发布验证。**
+
+## 默认开发执行策略：ChatGPT Chat First（历史规则；以以上强制模式为准）
 
 > **用户已确认的新规则：开发与测试优先在 ChatGPT 普通聊天中完成；只有确实需要时才使用 ChatGPT Work；通过验证后才部署到 ChatGPT Sites。** 此规则适用于新项目和既有项目，并覆盖本 Skill 中任何“默认先交给 Work 开发”的旧建议；不覆盖用户针对单次任务的明确指令。
 
@@ -41,7 +54,7 @@ updated: '2026-11-05'
 
 本 Skill 适用于用户要求「更新 PRD → 更新 GitHub → 给 ChatGPT Work 一条更新 Sites 的指令」。**首先判断用户实际业务终点；以下链路是可选路径，不是每次必须全部执行的硬性门槛。若现有 Site 已满足需求且用户不要求额外发布，应直接进入状态收尾。** 参考链路：
 
-`变更需求 → 影响分析 → 用户确认 → 更新 PRD → GitHub Commit/PR → 验证来源 → 生成 Work 指令 → Work 开发/测试 → 更新现有 Site → 生产验证 → 更新项目状态`
+`变更需求 → 影响分析 → 用户确认 → 更新 PRD → GitHub Commit/PR → 验证来源 → 生成 Work 指令 → Work 仅部署已验证版本 → 更新现有 Site → 生产验证 → 更新项目状态`
 
 **生成 Work 指令不等于执行 Work，也不等于 Sites 已部署。** 若用户只要求指令，不得擅自部署。PRD 文档更新也不代表代码已实现。
 

@@ -1,7 +1,7 @@
 ---
 name: prd-github-sites-update
 description: 用于更新既有 PRD、将已确认修改提交 GitHub，并生成完整的 ChatGPT Work 指令以更新现有 Sites；包含版本验证、交接、发布及状态追踪。
-version: '1.2'
+version: '1.3'
 created: '2026-10-16'
 updated: '2026-11-05'
 ---
@@ -39,7 +39,7 @@ updated: '2026-11-05'
 
 ## 1. 目标与执行边界
 
-本 Skill 适用于用户要求「更新 PRD → 更新 GitHub → 给 ChatGPT Work 一条更新 Sites 的指令」。标准链路：
+本 Skill 适用于用户要求「更新 PRD → 更新 GitHub → 给 ChatGPT Work 一条更新 Sites 的指令」。**首先判断用户实际业务终点；以下链路是可选路径，不是每次必须全部执行的硬性门槛。若现有 Site 已满足需求且用户不要求额外发布，应直接进入状态收尾。** 参考链路：
 
 `变更需求 → 影响分析 → 用户确认 → 更新 PRD → GitHub Commit/PR → 验证来源 → 生成 Work 指令 → Work 开发/测试 → 更新现有 Site → 生产验证 → 更新项目状态`
 
@@ -78,6 +78,8 @@ updated: '2026-11-05'
 5. 标注每条重要结论的证据等级：`GitHub verified`、`Sites verified`、`User reported`、`Not verified`。
 6. 如果缺少仓库或 Sites 访问权限，不假装读取成功；先完成可执行部分，其他使用 `【待提供】` 占位符。
 7. 在动手前说明当前状态、最后一次已验证发布、阻塞事项和下一步。
+8. 先确认用户的实际业务终点与现有 Site 是否已满足；不得默认 GitHub 有新提交就必须发布。
+9. 在安排 Work 前确认原 Site 托管源码编辑/同步、版本保存/发布及 D1 只读工具是否存在；检查精确 PR Head 的 GitHub Actions，不能以 legacy statuses 空列表判 CI 缺失。
 
 ## 4. 阶段 A：更新 PRD
 
@@ -132,7 +134,7 @@ updated: '2026-11-05'
 
 ## 6. 阶段 C：生成 ChatGPT Work 指令
 
-此阶段输出一份**可直接复制粘贴到 ChatGPT Work 的完整指令**，而不是一句「请更新 Sites」。必须包含：
+仅当用户仍需 Work 且已确认必要工具能力时，此阶段输出一份**可直接复制粘贴到 ChatGPT Work 的完整指令**，而不是一句「请更新 Sites」。必须包含：
 
 - Repository、目标分支、已验证 Commit SHA、PR/合并状态。
 - 现有 Sites 的项目标识、URL 和目标环境；未知则使用占位符。
@@ -275,6 +277,9 @@ PRD 文件：【PRD Path】
 - [ ] 保护生产数据、配置、URL、权限。
 - [ ] 明确风险确认、失败暂停、回滚与状态回写。
 - [ ] 不声称 Work 已执行或 Sites 已更新。
+- [ ] 已确认真实业务终点；如 User confirmed — no deploy needed，停止额外发布。
+- [ ] 已核对精确 Head 的 Actions（若适用），并分别标记 Sites source mapping unverified、No new Sites version published 等状态。
+- [ ] 已核实 Work 对原 Site 托管源码的实际操作能力，避免重复同质交接。
 - [ ] Work 指令最末尾附上 `Work | ` 对话标题重命名要求，并说明无法控制原生标题时应如实报告。
 
 ## 9. 最终回复格式
@@ -286,3 +291,67 @@ PRD 文件：【PRD Path】
 **ChatGPT Work 指令**：给出完整可复制的指令。
 
 **尚未完成的动作**：开发、测试、Sites 部署、生产验证的真实状态及下一步。
+
+## 10. 2026-11-05 Task Tracker 复盘：结果优先与发布控制（强制）
+
+> 来源：用户提供《2026-11-05 Task Tracker 工作复盘与 Skill 改进规范》。本章覆盖与之冲突的旧线性模板。复盘不是新的生产部署授权；不自动修改 Task Tracker Site、D1 或业务仓库。
+
+### 10.1 业务结果优先于流水线
+- **MUST** 在规划发布前确定用户真实终点：`需求/代码更新`、`GitHub 合并`、`既有 Site 功能验收`、`必须发布新 Sites 版本` 或 `问题修复`。
+- **MUST** 对既有 Site 先检查当前功能或取得用户确认。若用户确认现有 Site 满足需求，且没有明确要求强制同步或发布，**STOP RELEASE**：只做适当状态收尾，不继续源同步、保存版本或部署。
+- 用户验收仅记 `User confirmed`，不得推导 `Sites deployed`、`Source SHA matched`、`Production QA complete`。用户明确要求实际发布时尽力执行，但不能伪报工具能力。
+
+### 10.2 独立记录五种状态
+| 状态维度 | 可用值 | 证据 |
+|---|---|---|
+| Requirement / Functional acceptance | Pending / User confirmed / Tested | 用户原话、验收记录 |
+| GitHub Code / PR | Branch / Ready / Merged | PR、Commit SHA |
+| Automated CI | Passed / Failed / Not checked | 精确 Head 的 Actions Run ID |
+| Sites deployment | Deployed / Not deployed / Not requested / Unknown | Sites 原生发布记录 |
+| Sites source mapping | Verified / Unverified / Unsupported | 原 Site 的源码入口、分支及 HEAD 映射 |
+
+`Merged` ≠ `Deployed`；`User confirmed` ≠ `Merged source running on Site`；`Not deployed` 不表示用户功能不可用。证据来源分别标注 `GitHub verified`、`Sites verified`、`Work reported`、`User confirmed`、`Not verified`。
+
+### 10.3 Work 交接前的工具能力探查
+- **MUST** 先核实原 Site 的托管源码编辑入口、源分支查看与同步、保存版本、发布版本及 D1 只读访问是否真实可用；区分查看/发布已保存版本与实际更新托管源码。
+- **MUST** 固定正确的 Repo、Source subdirectory、Sites Project ID 和 Site URL；不得误入其他项目或创建新 Site。
+- `sites/react-d1/.openai/hosting.json` 中 `project_id` 只证明目标标识，不能证明 GitHub→Sites 已关联、可编辑或可自动部署。
+- 同一工具缺口不得重复发送同质 Work 指令；只有出现新的工具、权限、入口或授权才重试。交接最小、明确可执行的剩余工作。
+
+### 10.4 GitHub CI 与合并验证
+- **MUST** 读取 PR 最新 `head_sha`，核对**精确 Head** 的 GitHub Actions workflow runs、jobs、conclusions 和必要测试摘要。
+- Legacy combined commit `statuses: []` 不代表 Actions 未运行；不得据此否认绿色 Actions。
+- 合并前检查 Draft/Ready、mergeable、最新 Head 测试和 diff；合并后记录 Merge SHA，必要时比较 Head 与 Merge 的文件差异。零内容差异仍不等于 Sites 已发布；不为通过虚构检查而改代码或无意义重测。
+
+### 10.5 Sites SHA 与发布真实来源
+- **MUST** 分开记录 `GITHUB_HEAD_SHA`、`GITHUB_MERGE_SHA`、`SITES_SOURCE_SHA`、`SITES_DEPLOYMENT_VERSION`，不得互换。
+- Sites Source SHA 不在 GitHub 中，只能标记 `Source relationship unverified`，不能断言绑定错误；不得拿任意 GitHub SHA 冒充 Sites 托管分支 HEAD 传入保存版本 API。
+- 只有实际通过原 Site 支持的工具保存并发布成功，才可记录新的 Sites Version / Deployment ID。Work Prompt、GitHub Merge、只读检查均不算发布。
+
+### 10.6 风险检查按影响分类
+- **必须阻止**：可能覆盖/删除/迁移/暴露生产数据且未获授权；Site/DB/Owner-only 目标不明；必需工具不可用；必要回归失败；待发布代码来源无法证明。
+- **按风险记录并另行安排**：无 Schema Migration 的普通功能修改中无法完成完整备份、非关键长期监控、灾备恢复演练、未约定为发布门槛的实体手机测试。不得假称这些已完成，也不得一律升级为硬阻碍。
+- D1 只读行数、字段快照和可恢复离线备份是不同证据。用户确认无需额外发布时，不应启动生产变更。
+
+### 10.7 阻塞处理必须收敛
+每个阻塞只记录：**缺失的具体操作／已试工具与真实错误／已完成部分／真正需要的权限或平台能力／用户是否仍需此操作**。
+- 无新事实时停止重复交接和改写同质 Work Prompt；不虚构工具能力。
+- 用户变更目标、确认功能已满足或决定不发布时，立即重算剩余范围，清理过期阻塞。需要决策时只问一个真正改变下一步的问题。
+
+### 10.8 GitHub 收尾与 Issue 处理
+- **MUST** 在 `docs/PROJECT_STATUS.md` 顶部记录最新有效结论，保留旧尝试在追加日志，并注明旧部署阻碍何时被用户新决定取代。
+- 取消的额外部署 Issue 可标记 `Not Planned`，不能标记 `Completed / Deployed`；混合 Issue 中未验收的安全、备份或手机测试须明确标记未验证，必要时单独追踪。
+- 报告分别陈述 GitHub verified、Sites verified、Work reported、User confirmed、Not verified；不得因源映射未核实否认用户实际验收。
+
+### 10.9 回归场景（Skill 自检）
+- 用户称现有网站已有所需功能 → 若不要求强制发布，停止额外部署、记录 User confirmed。
+- Legacy Commit Status 空 → 查询精确 Head 的 Actions，不直接判 CI 失败。
+- PR 已合并但 Sites 版本旧 → 分开记录状态，确认是否需要发布。
+- Work 无原 Site 托管源码编辑工具 → 明确缺口并收敛，不重复交接。
+- Sites SHA 不在 GitHub → 映射未核实，不推断绑定错误。
+- hosting.json 有 project_id → 仅确认目标标识，不推断同步能力。
+- D1 有只读行数 → 不是备份；按实际风险处理。
+- 用户只要求 GitHub 状态更新 → 不自动发布 Sites。
+
+## 11. 本 Skill 变更记录
+- 2026-11-05 · v1.3 · 根据 Task Tracker 工作复盘增加业务终点、五维状态、工具能力检查、精确 Head CI、跨系统 SHA、风险分级、阻塞收敛及取消发布出口；保留 Chat First 和 Work 指令尾端 `Work | ` 命名规则。

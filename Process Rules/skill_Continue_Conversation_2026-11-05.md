@@ -1,19 +1,18 @@
 ---
 name: continue-conversation
-description: 当用户输入“继续对话”、要求压缩长聊天、迁移到新聊天、生成可复用 JSON 上下文、或从交接 JSON 恢复项目进度时使用。支持导出、恢复、增量更新和校验。
-version: '1.1'
+description: 用户明确要求导出、恢复或校验跨对话交接 JSON 时使用。
+version: '2.0'
 created: "2026-10-18"
 language: zh-CN
 trigger_keywords:
+  - 对话交接 JSON
   - 继续对话
-  - 对话交接
-  - 压缩对话
-  - 恢复对话
-  - conversation handoff
-updated: '2026-11-05'
+updated: '2026-11-07'
 ---
 
 # Continue Conversation — 长对话无损优先交接 Skill
+
+> 通用执行边界、按需加载与完成标准以仓库根目录 `AGENTS.md` 为准；不必为普通任务预先读取其他 Skill。
 
 ## 1. 目标
 
@@ -25,7 +24,7 @@ updated: '2026-11-05'
 
 ## 2. 触发与模式判定
 
-触发关键词：**继续对话**。
+触发：用户明确提出导出／恢复交接 JSON，或单独输入「继续对话」。普通的「继续开发」「接着做」不触发 JSON 导出。
 
 根据当前输入自动选择模式：
 

@@ -171,7 +171,7 @@ Never claim that a status file was updated unless a repository write succeeded.
 
 ## 11. Ready-to-use handoff instruction
 
-> 请先读取当前项目 GitHub 默认分支的 `docs/PROJECT_STATUS.md`，并检查最新 Commit、PR、CI 测试及 Sites 部署状态。以该文件作为跨对话交接的主要记录，但须与实时证据核对。区分 GitHub 已验证、Sites 已验证、用户报告及未验证的状态。每次完成开发、测试、合并、部署或生产验证后，必须更新同一份 `PROJECT_STATUS.md` 并追加 Change Log；保留历史记录、现有网站、数据、配置及访问权限。若工具无法读取或写入，请明确说明，不得假装完成。
+> 请先读取当前项目 GitHub 默认分支的 `docs/PROJECT_STATUS.md`，并检查最新 Commit、PR、CI 测试及 Sites 部署状态。以该文件作为跨对话交接的主要记录，但须与实时证据核对。区分 GitHub 已验证、Sites 已验证、用户报告及未验证的状态。当项目明确使用该状态文件且发生实质里程碑变化时，更新同一份 `PROJECT_STATUS.md` 并追加 Change Log；保留历史记录、现有网站、数据、配置及访问权限。若工具无法读取或写入，请明确说明，不得假装完成。
 
 ## 12. Completion checklist
 

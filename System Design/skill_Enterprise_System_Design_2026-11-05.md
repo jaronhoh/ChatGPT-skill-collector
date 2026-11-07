@@ -1,29 +1,18 @@
 ---
 name: enterprise-system-design
-description: 通用企业系统设计与 AI 协作开发规范，适用于 CRM、ERP、审批、任务管理、SaaS、内部管理系统及其他 Web/移动应用；从 NocoBase 3 官方企业应用开发指南提炼框架无关的方法。
-version: '2.1'
+description: 用户要求企业系统架构设计、设计文档或跨模块方案评审时使用。
+version: '2.0'
 created: '2026-11-05'
-updated: '2026-11-05'
+updated: '2026-11-07'
 language: zh-CN
 scope: framework-agnostic
 ---
 
 # Enterprise System Design — 通用系统设计与交付规范
 
+> 通用执行边界、按需加载与完成标准以仓库根目录 `AGENTS.md` 为准；不必为普通任务预先读取其他 Skill。
+
 > **核心定位**：这不是 NocoBase 开发 Skill。NocoBase 只是提炼规范的参考案例。任何项目均以其真实技术栈、现有架构、官方文档和用户业务目标为准。不要因为本 Skill 的来源而引入 NocoBase、NocoBase CLI、插件或目录结构。
-
-## 强制执行模式：Chat 开发，Work 仅用于 ChatGPT Sites 部署（2026-11-05）
-
-> **最高优先级项目工作流约束：所有开发工作必须始终在 ChatGPT 普通 Chat 模式进行。ChatGPT Work 只允许用于 ChatGPT Sites 的实际部署、发布以及与该次部署直接相关的发布后验证；不得用于需求分析、PM/PRD、系统设计、UI 设计、编写/修改代码、修复 Bug、测试、代码审查、GitHub 提交或合并。** 本规则覆盖本文件中任何较宽松的“Chat First”“必要时 Work 开发/测试”“Work 可处理浏览器或本地代码”表述。
-
-- **Chat 阶段**：需求、设计、开发、调试、测试、回归、GitHub 同步及审核全部在普通 Chat 完成。可以在 Chat 中使用当前授权的工具和连接器；Codex 等独立开发执行端若需配合，也必须由 Chat 主导，不把开发任务交给 Work。
-- **能力不足时**：在 Chat 中如实说明无法执行的操作、缺失证据和阻碍，继续寻求 Chat 可用的工具或请求用户提供环境；**不得以工具不足为理由改用 Work 开发或测试**，不得把未执行的测试写成通过。
-- **唯一 Work 入口**：仅在源码已准备、必要测试完成且用户明确要求部署/更新 ChatGPT Sites 时，交给 Work **最小部署范围**：定位原 Site → 同步已验证的 GitHub 源码/构建产物 → 保存/发布 → 检查发布后实际运行。Work 不得重新设计、开发、修复功能或替代 Chat 完成预发布测试。
-- **部署遇阻**：如果 Work 发现需要代码修改或修复，停止该部分并把问题返回 Chat；Chat 修复和验证后，才重新启动部署。若 Sites 工具不可用，如实报告，不假装发布成功。
-- **不需要部署**：任务终点只是设计、代码、GitHub 更新或用户确认无需发布时，整个流程都不进入 Work。
-- **状态分离**：Chat 开发完成、GitHub 提交、CI、Sites 发布及生产验证必须分别有证据；GitHub Commit/Merge 不等于 Sites 部署。
-
-**固定流程：PM Make → PRD Make → 系统/UI 设计 → Chat 开发 → Chat 测试 → Chat GitHub 更新与核验 → [用户要求部署 Sites 时] Work 部署与发布验证。**
 
 ## 1. 适用范围与优先级
 

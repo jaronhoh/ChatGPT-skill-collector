@@ -1,14 +1,24 @@
 ---
 name: prd-github-sites-update
 description: 用户要求更新现有 PRD 并同步 GitHub，或生成既有 Sites 的 Work 部署指令时使用。
-version: '2.0'
+version: '2.1'
 created: '2026-10-16'
-updated: '2026-11-08'
+updated: '2026-11-09'
 ---
 
 # PRD → GitHub → ChatGPT Work → Sites
 
 > 通用执行边界、按需加载与完成标准以仓库根目录 `AGENTS.md` 为准；不必为普通任务预先读取其他 Skill。
+
+## 0. Work 部署指令自动交付（强制）
+
+**触发条件**：用户的交付目标包含「部署 ChatGPT Sites」「更新原 Production Site」「修复并上线」「继续完成 Production」，即使没有单独说「生成 Work 指令」，也必须主动交付。不得等待用户提醒。
+
+1. 在 Chat 内完成并核验本次适用的需求/代码/测试/GitHub 工作；先复用已验证 SHA、CI 与历史成功部署路径，不无条件重跑完整测试。
+2. **当剩余任务是 Sites 发布或线上验证时，在同一次 Chat 回复主动给出完整、可直接复制到 Work 的指令**。至少包括：项目、仓库/分支、精确 GitHub SHA、已验证测试、未验证项、现有 Site URL/ID（若已知）、历史成功部署证据、保护 URL/Owner-only/数据/配置、只部署未完成步骤、Production 验证、部署失败诊断与安全恢复。
+3. 若尚有真实阻塞，先保留 checkpoint 并标记阻塞；仅交接 Work 实际能完成的步骤，不编造 Commit、Deployment ID、工具/API 或测试结果。
+4. **不得自动切换 Work、不得让 Work 重做开发、不得把生成指令当作 Production 已上线。**
+5. 如果用户只要求 PRD、GitHub 或文档更新，没有 Sites 发布意图，则不强制生成 Work 指令。
 
 ## 1. 目标与执行边界
 

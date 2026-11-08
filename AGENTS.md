@@ -1,6 +1,6 @@
 # Agent Instructions
 
-This repository is a collection of reusable guidance files, not an application runtime. The eight existing `skill_*.md` paths are stable entry points for users who have already imported them.
+This repository is a collection of reusable guidance files, not an application runtime. Existing `skill_*.md` paths remain stable entry points for users who have already imported them.
 
 ## Scope and loading
 
@@ -19,11 +19,11 @@ This repository is a collection of reusable guidance files, not an application r
 
 ## Done means done
 
-For implementation tasks: implement the requested behavior → run the relevant code or tests where tools allow → inspect actual results → fix failures introduced by the change → rerun affected verification. Continue until acceptance criteria are met or a concrete external blocker remains. No mandatory full-suite reruns for a small reversible edit; use risk-proportionate checks. Report unexecuted checks as unverified, not passed.
+For implementation tasks: on a tool failure, first diagnose and attempt safe, bounded recovery; preserve the last verified SHA and stage rather than restarting completed work. When the user explicitly requests an automatic recovery workflow, load [Development & Deployment Recovery](Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md). Implement the requested behavior → run the relevant code or tests where tools allow → inspect actual results → fix failures introduced by the change → rerun affected verification. Continue until acceptance criteria are met or a concrete external blocker remains. No mandatory full-suite reruns for a small reversible edit; use risk-proportionate checks. Report unexecuted checks as unverified, not passed.
 
 For documentation-only changes: validate file syntax, paths, links, scope, and conflicting instructions; confirm GitHub writes by reading the committed files. Do not invent runtime tests for a Markdown-only repository.
 
-For deployment tasks: distinguish GitHub committed, CI verified, Sites deployed and production verified. Preserve existing Site URL, data, configuration, secrets and permissions. Stop when the user's requested outcome is met; do not add unrelated release gates.
+For deployment tasks: distinguish GitHub committed, CI verified, Sites deployed and production verified. Preserve existing Site URL, data, configuration, secrets and permissions. Stop when the user's requested outcome is met; do not add unrelated release gates. A failed deployment requires evidence-based diagnosis and checkpoint preservation; never assume commit equals production. If the target platform does not expose a deployment capability, report the precise external blocker instead of claiming automation.
 
 ## Task-specific references
 

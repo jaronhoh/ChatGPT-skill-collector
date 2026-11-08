@@ -1,13 +1,31 @@
 ---
 name: development-deployment-recovery
 description: 用户要求建立或执行开发、测试、发布的故障恢复与断点续跑机制时使用。
-version: '1.0'
-updated: '2026-11-08'
+version: '2.0'
+updated: '2026-11-09'
 ---
 
 # Development & Deployment Recovery — 自动恢复与可验证交付
 
-> **按需启用**：仅在用户明确要求恢复失败的开发/部署任务、制定自动恢复 SOP、或要求为项目安装 CI/Checkpoint/Manifest 时读取。本文件不意味着 GitHub Actions、Sites 自动部署接口或测试环境已经存在。通用安全边界见仓库根目录 `AGENTS.md`。
+> **按需启用**：当用户明确要求恢复失败的开发/部署任务、制定自动恢复 SOP、安装 CI/Checkpoint/Manifest，或当前 Sites 部署已经失败需要恢复时读取。本文件不意味着 GitHub Actions、Sites 自动部署接口或测试环境已经存在。通用安全边界见仓库根目录 `AGENTS.md`。
+
+## 0. 跨项目开发、测试与部署 SOP v2
+
+本 SOP 适用于 React、Next.js、Node.js、Cloudflare Worker、GitHub、ChatGPT Sites 等项目，但具体命令和发布机制必须依据目标仓库的真实技术栈。**Chat First, Work Last；Historical Success First；Risk-Based Testing；Cloud First；Resume from Checkpoint；Verify Real Results。**
+
+**主动生成 Work 指令**：只要用户目标包含 Sites 发布/更新/上线，Chat 完成必要开发、测试和 GitHub 工作后，必须主动在当前 Chat 输出完整可复制的 Work 部署指令，**不得等待用户再次提醒**。若 Chat 已能合法完成实际发布，则以实际发布结果为准；不把 Work 指令当成发布成功。不自动转交 Work，不要求 Work 重新开发或重测已验证功能。若有阻塞，记录真实 checkpoint，仅交接 Work 可执行的剩余步骤。
+
+**责任划分**：AI 在已授权工具范围内负责需求、PRD、UI、代码、GitHub、CI、测试环境选择、测试、诊断、故障恢复、部署和线上核验；用户负责业务需求、重大范围决策、不可逆风险批准、平台必要授权和最终验收。优先使用已连接的云端工具，不默认要求用户安装 Node、Chromium、Playwright、Git、Docker，或手动执行 Git 命令、配置测试环境、处理 DNS、复制构建产物。不能绕过平台授权，也不能凭空声称工具可用。
+
+**历史成功优先**：对已成功部署的项目，先核对上次 Production Version、GitHub Source Commit、Site Source Commit、实际构建方式、部署入口、Deployment ID、线上验证结果；优先复用可证实的成功路径。不得未经调查就重建 Site、修改 URL、重置数据库、改变 Owner-only、替换 Secrets 或迁移平台。历史结果只能作为证据，不能反推编造内部 API/命令。
+
+**智能测试**：先确认源 SHA、依赖、构建配置和测试覆盖是否变化。证据有效则复用已通过的测试；变化时按风险执行最小必要 Node、Worker、Chromium/Playwright、响应式、财务计算、API、数据或权限测试。优先查现有 GitHub Actions 和浏览器测试 artifacts，再找其他已授权云端测试环境；单一环境缺依赖不代表所有测试不可做。失败时区分代码/测试/依赖/环境，修复后只重跑受影响检查及必要回归；无新证据不重复同一失败操作。默认最多两次有依据的安全恢复尝试。
+
+**云端部署**：确认原 Site、目标 SHA、历史可用发布路径和保护要求；区分 GitHub Commit 与 Site Source Commit，必要时先同步源码、读取真实 Site Source HEAD、构建 Worker（仅项目实际使用时）、保存 Site Version、部署 Production，再核验 URL、版本、Deployment ID（平台提供时）、受影响功能、权限和数据保护状态。Save Version ≠ Deploy；CI Passed ≠ Production Deployed。可能已有副作用的发布操作必须先查实际状态再重试。
+
+**恢复和停止**：按真实证据推进 REQUIREMENTS_CONFIRMED → SOURCE_VERIFIED → IMPLEMENTED → TESTED → COMMITTED → SOURCE_SYNCED（适用时）→ BUILT（适用时）→ DEPLOYED → PRODUCTION_VERIFIED → DONE；用户最终验收另记 USER_ACCEPTED。仅从最后未完成阶段恢复，保留 SHA、测试、Site Version、部署证据和错误类别。达到用户要求的终点即停止，不追加无关测试、文档、审批或基础设施变更。
+
+**已提供的历史成功案例（非当前平台核验）**：用户提供的 Work 执行记录称 `jaronhoh/margin-share-calculator` 的 BUG-UI-005 在 GitHub Source `3542177059ed72a52d71f23e8df2d585991a3cb3`、Site Source `8c1d5ed`、Production Version 2、Deployment ID `appgdep_6af0da067d908191b3b42f37866bead8` 成功发布至 `https://margin-share-calculator.jaron-hoh.chatgpt.site/`，保留 Owner-only，并完成 1440/390/320px 和 Light/Dark 检查。**证据等级：User-provided Work execution report；未经本次实时核验。** 此记录可用于调查同项目后续部署，但不代表其他 Sites 具有相同接口。该项目曾使用 `node tools/build-site-worker.mjs`，不应推广为其他项目的通用命令。
 
 ## 1. 目标与责任
 
@@ -89,7 +107,7 @@ REQUIREMENTS_CONFIRMED
 
 ## 7. Work 部署指令输出模板（仅在用户要求发布时）
 
-在当前 Chat 输出：目标原 Site、精确 GitHub SHA 或已保存版本、已验证测试与未验证项、部署范围、保留 URL/数据/配置/权限要求、单次发布步骤、生产最小核验、Deployment ID/版本可得性、失败诊断和恢复 checkpoint。**不要命令 Work 重新开发、修复源码或重跑整个测试矩阵。** 用户自行决定是否使用；输出指令不是发布。
+**不等待用户第二次提醒**：只要本次任务的明确终点包含 Sites 部署，Chat 侧准备完成后自动在当前 Chat 输出：目标原 Site、精确 GitHub SHA 或已保存版本、已验证测试与未验证项、部署范围、保留 URL/数据/配置/权限要求、单次发布步骤、生产最小核验、Deployment ID/版本可得性、失败诊断和恢复 checkpoint。**不要命令 Work 重新开发、修复源码或重跑整个测试矩阵。** 用户自行决定是否使用；输出指令不是发布。
 
 ## 8. DONE 标准与停止条件
 

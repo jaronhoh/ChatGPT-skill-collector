@@ -2,7 +2,7 @@
 name: skill-collector-router
 description: 用户明确要求使用本仓库某个 Skill 或选择具体工作流时，用于定位对应文件。
 version: '1.0'
-updated: '2026-11-07'
+updated: '2026-11-08'
 ---
 
 # Skill Collector — 按需路由
@@ -17,6 +17,7 @@ updated: '2026-11-07'
 | 明确导出、恢复或校验对话交接 JSON；单独输入「继续对话」 | [Continue Conversation](Process%20Rules/skill_Continue_Conversation_2026-11-05.md) |
 | 更新既有 PRD/GitHub 并准备既有 Sites 的部署指令 | [PRD → GitHub → Sites](Process%20Rules/skill_PRD_GitHub_Sites_Update_2026-11-05.md) |
 | 明确输入 Ponytail 模式或 ponytail-review/audit/debt | [Ponytail](Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) |
+| 明确要求故障自动恢复、断点续跑、部署失败诊断，或安装 CI/Release Manifest/Checkpoint | [Development & Deployment Recovery](Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
 | 明确查询、更新项目状态文件或跨项目交接 | [Project Handoff](Process%20Rules/skill_Project_Handoff_2026-11-05.md) |
 | 企业系统架构设计、设计文档或跨模块设计评审 | [Enterprise System Design](System%20Design/skill_Enterprise_System_Design_2026-11-05.md) |
 
@@ -25,4 +26,4 @@ updated: '2026-11-07'
 1. 根文件只做路由；选定后才读取目标 Skill 的任务相关章节、模板或引用文档。
 2. 不因为 Skill 里提到 GitHub、测试、UI、NocoBase 或 Sites 就额外激活其他 Skill。
 3. 遵守 [AGENTS.md](AGENTS.md) 的执行边界和完成标准；如某个旧 Skill 仍包含过时的全局要求，以 AGENTS.md 的通用边界及用户当前明确指令为准。
-4. 保持原有八个文件路径，方便已建立的引用继续使用。
+4. 保持原有八个文件路径，方便已建立的引用继续使用；恢复机制为独立第九个 Skill，不因一般代码任务自动触发。

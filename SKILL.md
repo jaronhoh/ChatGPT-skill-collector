@@ -1,8 +1,8 @@
 ---
 name: skill-collector-router
-description: 用户明确要求使用本仓库某个 Skill 或选择具体工作流时，用于定位对应文件。
-version: '2.0'
-updated: '2026-11-08'
+description: 根据明确任务选择远程 Skill；包含 Sites 发布目标时主动触发部署交接。
+version: '2.1'
+updated: '2026-11-09'
 ---
 
 # Skill Collector — 按需路由
@@ -15,11 +15,19 @@ updated: '2026-11-08'
 | 根据已确认方案撰写或续写 PRD | [PRD Make](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/PRD/skill_PRD_Make_2026-11-05.md) |
 | 明确使用 Codex with ChatGPT (C2C) 只读连接规划/审查 | [C2C](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Codex_With_ChatGPT_2026-11-05.md) |
 | 明确导出、恢复或校验对话交接 JSON；单独输入「继续对话」 | [Continue Conversation](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Continue_Conversation_2026-11-05.md) |
-| 更新既有 PRD/GitHub 并准备既有 Sites 的部署指令 | [PRD → GitHub → Sites](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_PRD_GitHub_Sites_Update_2026-11-05.md) |
+| 用户目标包含 Sites 上线、更新生产、部署或发布（无需再次要求 Work 指令） | [PRD → GitHub → Sites](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_PRD_GitHub_Sites_Update_2026-11-05.md) |
 | 明确输入 Ponytail 模式或 ponytail-review/audit/debt | [Ponytail](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) |
-| 明确要求故障自动恢复、断点续跑、部署失败诊断，或安装 CI/Release Manifest/Checkpoint | [Development & Deployment Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
+| 明确要求故障恢复/断点续跑/CI，或已有部署失败需要恢复 | [Development & Deployment Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
 | 明确查询、更新项目状态文件或跨项目交接 | [Project Handoff](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md) |
 | 企业系统架构设计、设计文档或跨模块设计评审 | [Enterprise System Design](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/System%20Design/skill_Enterprise_System_Design_2026-11-05.md) |
+
+## 主动 Work 指令触发（必须）
+
+只要当前任务的**明确交付终点包含 ChatGPT Sites 部署**，即使用户只说「修复并上线」「继续完成 Production」「部署到原 Site」，也必须主动加载上表 PRD → GitHub → Sites Skill；如果涉及失败恢复，再按需加载 Recovery Skill。**不要求用户再次提醒「给我 Work 指令」。**
+
+Chat 负责完成已授权的开发、风险适配测试、GitHub 提交和证据核验。若当前 Chat 无法直接执行 Sites 部署，则在这些步骤完成后**主动在当前回复输出完整可复制的 Work-only 指令**，包括精确源码 SHA、测试证据、现有 Site、保护约束、部署步骤、Production 验证与失败恢复；不自动创建 Work 任务，也不把 Work 指令称为已部署。
+
+若 Chat 端仍有阻塞，报告真实 checkpoint，不捏造已通过测试；可针对 Work 实际可执行的剩余工作给出受限交接。用户只要求 GitHub/文档而未要求发布时，不额外生成 Work 指令。
 
 ## GitHub Remote Skill Loader v2
 

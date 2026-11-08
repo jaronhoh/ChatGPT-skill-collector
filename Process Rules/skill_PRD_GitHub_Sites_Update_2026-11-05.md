@@ -3,7 +3,7 @@ name: prd-github-sites-update
 description: 用户要求更新现有 PRD 并同步 GitHub，或生成既有 Sites 的 Work 部署指令时使用。
 version: '2.0'
 created: '2026-10-16'
-updated: '2026-11-07'
+updated: '2026-11-08'
 ---
 
 # PRD → GitHub → ChatGPT Work → Sites
@@ -18,7 +18,7 @@ updated: '2026-11-07'
 
 **生成 Work 指令不等于执行 Work，也不等于 Sites 已部署。** 若用户只要求指令，不得擅自部署。PRD 文档更新也不代表代码已实现。
 
-本 Skill 自包含关键流程，不依赖其他 Skill 文件运行；原则继承 PRD Make 的模块化评审、待决策和追加日志机制，以及 Project Handoff 的跨对话状态和证据规则。
+本 Skill 保留 PRD→GitHub→Sites 的发布范围与证据规则。只有用户明确要求自动恢复、CI、Release Manifest 或 Recovery Checkpoint 时，才按需读取 [Development & Deployment Recovery](skill_Development_Deployment_Recovery_2026-11-08.md)，不要每次发布都强制加载。
 
 ## 2. 项目文件结构
 

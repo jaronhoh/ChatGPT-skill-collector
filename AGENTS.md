@@ -4,7 +4,7 @@ This repository is a collection of reusable guidance files, not an application r
 
 ## Scope and loading
 
-- Start from the user's actual task. Read only the relevant file in `SKILL.md` and any linked task-specific sections; do not read every Skill, architecture guide, database guide, or deployment guide by default.
+- Start from the user's actual task. Use the Project-uploaded `SKILL.md` router to read only the matching GitHub-hosted Skill and its task-specific sections; do not read every Skill, architecture guide, database guide, or deployment guide by default.
 - Skills are opt-in workflows, not global constraints. A generic coding request does not activate PM Make, PRD Make, Ponytail, C2C, Project Handoff, or deployment guidance.
 - User instructions and the target project's verified constraints take precedence over these reusable defaults. Keep framework-specific commands out of framework-agnostic work.
 - Do not assume this repository's instructions automatically apply to other GitHub repositories or to ChatGPT Project settings; they must be installed or explicitly referenced.
@@ -19,7 +19,7 @@ This repository is a collection of reusable guidance files, not an application r
 
 ## Done means done
 
-For implementation tasks: on a tool failure, first diagnose and attempt safe, bounded recovery; preserve the last verified SHA and stage rather than restarting completed work. When the user explicitly requests an automatic recovery workflow, load [Development & Deployment Recovery](Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md). Implement the requested behavior → run the relevant code or tests where tools allow → inspect actual results → fix failures introduced by the change → rerun affected verification. Continue until acceptance criteria are met or a concrete external blocker remains. No mandatory full-suite reruns for a small reversible edit; use risk-proportionate checks. Report unexecuted checks as unverified, not passed.
+For implementation tasks: on a tool failure, first diagnose and attempt safe, bounded recovery; preserve the last verified SHA and stage rather than restarting completed work. When the user explicitly requests an automatic recovery workflow, use the remote Development & Deployment Recovery URL in the Project's `SKILL.md` router; only claim it was loaded after a successful remote read. Implement the requested behavior → run the relevant code or tests where tools allow → inspect actual results → fix failures introduced by the change → rerun affected verification. Continue until acceptance criteria are met or a concrete external blocker remains. No mandatory full-suite reruns for a small reversible edit; use risk-proportionate checks. Report unexecuted checks as unverified, not passed.
 
 For documentation-only changes: validate file syntax, paths, links, scope, and conflicting instructions; confirm GitHub writes by reading the committed files. Do not invent runtime tests for a Markdown-only repository.
 
@@ -27,4 +27,4 @@ For deployment tasks: distinguish GitHub committed, CI verified, Sites deployed 
 
 ## Task-specific references
 
-See [SKILL.md](SKILL.md) for exact activation criteria. Read source documents and linked references only when the selected task needs them. Do not expand references recursively without a task-related reason.
+The Project-uploaded `SKILL.md` contains the GitHub raw URLs and exact activation criteria. Fetch only a matched Skill using available authorized tools; record the actual GitHub commit SHA for reproducible work when needed. If the remote read fails, say the Skill was not loaded and continue only with verified local instructions. Uploading `AGENTS.md` and `SKILL.md` does not itself grant network/GitHub access or register native Skills. These Project copies do not automatically update when GitHub changes; re-upload them after router/global-rule edits. Read further references only when relevant.

@@ -1,7 +1,7 @@
 ---
 name: development-deployment-recovery
 description: 用户要求建立或执行开发、测试、发布的故障恢复与断点续跑机制时使用。
-version: '2.0'
+version: '2.1'
 updated: '2026-11-09'
 ---
 
@@ -26,6 +26,20 @@ updated: '2026-11-09'
 **恢复和停止**：按真实证据推进 REQUIREMENTS_CONFIRMED → SOURCE_VERIFIED → IMPLEMENTED → TESTED → COMMITTED → SOURCE_SYNCED（适用时）→ BUILT（适用时）→ DEPLOYED → PRODUCTION_VERIFIED → DONE；用户最终验收另记 USER_ACCEPTED。仅从最后未完成阶段恢复，保留 SHA、测试、Site Version、部署证据和错误类别。达到用户要求的终点即停止，不追加无关测试、文档、审批或基础设施变更。
 
 **已提供的历史成功案例（非当前平台核验）**：用户提供的 Work 执行记录称 `jaronhoh/margin-share-calculator` 的 BUG-UI-005 在 GitHub Source `3542177059ed72a52d71f23e8df2d585991a3cb3`、Site Source `8c1d5ed`、Production Version 2、Deployment ID `appgdep_6af0da067d908191b3b42f37866bead8` 成功发布至 `https://margin-share-calculator.jaron-hoh.chatgpt.site/`，保留 Owner-only，并完成 1440/390/320px 和 Light/Dark 检查。**证据等级：User-provided Work execution report；未经本次实时核验。** 此记录可用于调查同项目后续部署，但不代表其他 Sites 具有相同接口。该项目曾使用 `node tools/build-site-worker.mjs`，不应推广为其他项目的通用命令。
+
+## 0.1 强制防重复失败协议：空工作区 / GitHub DNS / 克隆失败
+
+**强制前置条件（每个新 Work 会话独立执行）**：在尝试任何 `git clone`、终端网络访问或权限申请之前，先读取本 Skill 的 GitHub 最新版并记录版本；读取目标仓库现有 GitHub 连接器的可用操作，直接核对目标分支、源码文件、PRD、历史 CI、提交与上次 Sites 发布证据。远程 Skill 已更新不等于当前 Work 自动加载；如无法读取，明确报告规则未加载，不得假称遵守。
+
+**禁止把空目录当作阻塞**：本地工作目录为空只表示没有 checkout，不等于无法读取仓库。优先通过 GitHub 连接器执行文件读取、搜索、代码修改/提交、PR 审核和 CI 查询；如连接器有权限，不得声称必须先克隆才能查看代码、PRD 或测试文件。连接器无法提供完整本地执行环境时，将构建/运行测试单独标记为待解决，不得因此停止审计和其他可执行工作。
+
+**DNS 熔断器**：一旦 `github.com` DNS 解析失败（例如 `Could not resolve host`），将当前终端路径标记 `DNS_BLOCKED`；**同一任务不得再尝试相同 git clone / ls-remote / curl / 网络提权路径**，除非网络环境或授权状态出现可验证的新变化。不得反复申请同一种网络权限。改用现有已授权 GitHub 连接器；连接器成功读取仓库时，继续可完成的任务。连接器自身失败时，先检查返回的错误类别，不得循环同样调用。
+
+**替代执行路线**：需要运行 Node、Worker、Chromium 等测试时，先核对精确源码 SHA 对应的现有 GitHub Actions、可用的云端执行工具及既有工作区。若允许通过 GitHub 连接器安全修改 workflow 触发必要测试，可按项目现有 CI 规则执行；不得为了测试而修改生产逻辑或虚构通过结果。任何可用的其他环境都必须经过真实能力确认，不能假设存在。
+
+**分项继续，不得整体停工**：把工作拆为 `CONNECTOR_READ`、`AUDIT`、`IMPLEMENT`、`CI_TEST`、`SITES_DEPLOY`、`PRODUCTION_VERIFY`。一个阶段的某项环境依赖失败，仅标记该项 `BLOCKED`，继续其他独立且安全的任务；不能因克隆失败直接宣称全部未开始。保留每项真实证据和最后成功 checkpoint。
+
+**禁止伪保证**：Skill 无法更改平台沙箱 DNS、绕过必要授权或保证新会话自动读取。若所有合法执行路径均不可用，明确说明唯一不可替代的阻塞；不要向用户重复提出已经失败且没有新条件的操作。
 
 ## 1. 目标与责任
 

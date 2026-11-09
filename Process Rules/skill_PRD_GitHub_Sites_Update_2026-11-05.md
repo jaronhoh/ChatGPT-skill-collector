@@ -1,7 +1,7 @@
 ---
 name: prd-github-sites-update
-description: 用户要求更新现有 PRD 并同步 GitHub，或生成既有 Sites 的 Work 部署指令时使用。
-version: '2.1'
+description: 用户要求更新现有 PRD 并同步 GitHub，或核验、执行、交接既有 Sites 发布时使用。
+version: '2.2'
 created: '2026-10-16'
 updated: '2026-11-09'
 ---
@@ -12,11 +12,11 @@ updated: '2026-11-09'
 
 ## 0. Work 部署指令自动交付（强制）
 
-**触发条件**：用户的交付目标包含「部署 ChatGPT Sites」「更新原 Production Site」「修复并上线」「继续完成 Production」，即使没有单独说「生成 Work 指令」，也必须主动交付。不得等待用户提醒。
+**触发条件**：用户的交付目标包含「部署 ChatGPT Sites」「更新原 Production Site」「修复并上线」「继续完成 Production」，即使没有单独说「生成 Work 指令」，也必须主动处理发布。仅当剩余步骤确实需要 Work 且其能力已核实，才主动交付部署指令。
 
 1. 在 Chat 内完成并核验本次适用的需求/代码/测试/GitHub 工作；先复用已验证 SHA、CI 与历史成功部署路径，不无条件重跑完整测试。
-2. **当剩余任务是 Sites 发布或线上验证时，在同一次 Chat 回复主动给出完整、可直接复制到 Work 的指令**。至少包括：项目、仓库/分支、精确 GitHub SHA、已验证测试、未验证项、现有 Site URL/ID（若已知）、历史成功部署证据、保护 URL/Owner-only/数据/配置、只部署未完成步骤、Production 验证、部署失败诊断与安全恢复。
-3. 若尚有真实阻塞，先保留 checkpoint 并标记阻塞；仅交接 Work 实际能完成的步骤，不编造 Commit、Deployment ID、工具/API 或测试结果。
+2. **当剩余任务是 Sites 发布或线上验证、且需要已核实的 Work 能力时，在同一次 Chat 回复主动给出完整、可直接复制到 Work 的指令**。至少包括：项目、仓库/分支、精确 GitHub SHA、已验证测试、未验证项、现有 Site URL/ID（若已知）、历史成功部署证据、保护 URL/Owner-only/数据/配置、只部署未完成步骤、Production 验证、部署失败诊断与安全恢复。
+3. 路径失败时保留 checkpoint，按 Recovery §0.2 继续适用备选路径。仅交接 Work 可执行的剩余步骤。Commit、Deployment ID、工具能力和测试结果均须有证据。
 4. **不得自动切换 Work、不得让 Work 重做开发、不得把生成指令当作 Production 已上线。**
 5. 如果用户只要求 PRD、GitHub 或文档更新，没有 Sites 发布意图，则不强制生成 Work 指令。
 
@@ -28,7 +28,7 @@ updated: '2026-11-09'
 
 **生成 Work 指令不等于执行 Work，也不等于 Sites 已部署。** 若用户只要求指令，不得擅自部署。PRD 文档更新也不代表代码已实现。
 
-本 Skill 保留 PRD→GitHub→Sites 的发布范围与证据规则。只有用户明确要求自动恢复、CI、Release Manifest 或 Recovery Checkpoint 时，才按需读取 [Development & Deployment Recovery](skill_Development_Deployment_Recovery_2026-11-08.md)，不要每次发布都强制加载。
+本 Skill 保留 PRD→GitHub→Sites 的发布范围与证据规则。遇到发布预检无法闭合、发布失败，或用户明确要求自动恢复、CI、Release Manifest 或 Recovery Checkpoint 时，按需读取 [Development & Deployment Recovery](skill_Development_Deployment_Recovery_2026-11-08.md)，不要每次发布都强制加载。
 
 ## 2. 项目文件结构
 
@@ -62,7 +62,16 @@ updated: '2026-11-09'
 6. 如果缺少仓库或 Sites 访问权限，不假装读取成功；先完成可执行部分，其他使用 `【待提供】` 占位符。
 7. 在动手前说明当前状态、最后一次已验证发布、阻塞事项和下一步。
 8. 先确认用户的实际业务终点与现有 Site 是否已满足；不得默认 GitHub 有新提交就必须发布。
-9. 在安排 Work 前确认原 Site 托管源码编辑/同步、版本保存/发布及 D1 只读工具是否存在；检查精确 PR Head 的 GitHub Actions，不能以 legacy statuses 空列表判 CI 缺失。
+9. 核对精确 PR Head 的 GitHub Actions（若适用），并验证测试证据适用于待发布 SHA。Legacy statuses 空列表不足以判断 Actions 缺失。
+
+### 3.1 既有 Sites 发布路径预检（开发前）
+
+仅在用户目标包含 Sites 发布时执行。新变更在开发前预检，已实现的变更从 checkpoint 续跑。以只读证据验证每一环，实际发布时再核对待发布 SHA 和权限。
+
+1. 读取实时 Sites 项目与当前 Production 记录，核对用户指定 URL、Site ID、环境、当前版本和访问策略。分别记录 GitHub 仓库/分支/基线 SHA，以及 Sites 实际绑定的 source repo 或受支持的产物入口、分支/HEAD 和已发布版本的来源。独立绑定仓库需单独验证。历史记录与 `hosting.json` 只提供线索，不能单独证明绑定关系、Site ID 或写权限。
+2. 验证 GitHub 精确 SHA 如何同步到该 Site 的绑定源码，或如何经平台支持的入口交付可追溯产物。核对当前环境的工具参数、目标与权限，并查证该 Site 历史成功入口是否仍可用。读取 GitHub 或拥有 GitHub 写权限不足以证明能写 Sites 绑定源码。
+3. 核对该原 Site 的 Save Version、Deploy、发布状态查询及 Production 验收能力（包括按项目需要的受保护访问及只读数据检查）。明确每一步的执行环境、已确认能力与尚需授权的动作。预检不写源码、不保存版本、不部署、不触碰生产数据。
+4. 记录链路 `GitHub → 实际 Sites source/产物 → Save Version → Deploy → Production 验收` 的各环证据与缺口。发现缺口时先按 Recovery §0.2 排查备选路径；未闭合时继续用户授权的独立工作，将发布标为待核验，禁止把 GitHub 合并或盲目交接当作可发布的证明。
 
 ## 4. 阶段 A：更新 PRD
 
@@ -125,11 +134,11 @@ updated: '2026-11-09'
 - 已确认变更、明确不做范围、功能 ID、验收标准 ID。
 - 已在 Chat 完成的代码、测试、审查证据，以及 Work 仅需执行的部署前确认与部署后验证。
 - 保护现有 Site URL、数据、编号、配置、Secrets 和访问权限。
-- 失败/冲突/高风险修改时暂停并询问用户。
+- 失败后按 Recovery §0.2 诊断与续跑。仅在需要新增授权或重大风险决策时询问用户。
 - 交付证据与 `PROJECT_STATUS.md` 回写要求。
 - **Work 对话命名（必须置于完整 Work 指令的最末尾）**：要求将当前 Work 对话标题设为以精确前缀 `Work | ` 开头，建议格式 `Work | 【项目名称】 | 【任务摘要】`；若已有此前缀，不得重复添加。仅在界面或工具实际允许时执行重命名；无法操作时明确报告，不能声称已完成。
 
-如果 GitHub 只更新了 PRD，**不得直接部署**；返回 Chat 完成代码实现与必要测试，再考虑最小部署交接。
+如果 GitHub 只更新了 PRD，在代码实现与必要测试就绪前不生成发布交接。
 
 ### 标准 ChatGPT Work 指令模板（仅部署；以下步骤以本节强制约束为准）
 
@@ -149,7 +158,10 @@ PRD 文件：【PRD Path】
 待决策事项：【Decision Log Path】
 追加日志：【Append Log Path】
 项目状态：【Status File Path】
-现有 Site：【Site URL / Project ID】
+现有 Site：【Site URL / 已核实 Site ID】
+实际绑定源码或平台产物入口：【Repo / Branch / HEAD 或入口及证据】
+可用能力与发布授权：【Sync / Save / Deploy / Read-back / Verify】
+恢复 checkpoint：【最后成功阶段 / 证据 / 待执行步骤 / 已排除路径】
 目标环境：【Development / Staging / Production】
 上次已验证发布：【Last Verified Release / Unknown】
 
@@ -162,13 +174,13 @@ PRD 文件：【PRD Path】
 【执行步骤】
 1. 先读取 GitHub 实时仓库、指定 Commit、PRD、模块规划、待决策事项和 PROJECT_STATUS.md；核对本次需求是否已获确认。
 2. 检查当前代码、PR/合并状态、CI、现有 Site 和上次发布来源。报告差异、风险和阻塞事项。
-3. 若代码尚未实现 PRD 修改，停止部署并返回 Chat 实现；Work 不得修改源码。
-4. 核验 Chat 已完成的按风险分级的必要测试证据；缺失关键测试则停止部署并返回 Chat，不得在 Work 补做开发阶段测试。
+3. 复用已验证的实现与 GitHub SHA。若证据确实表明当前 SHA 缺少目标实现，记录具体差异并停止发布该 SHA。Work 的源码操作限于授权的发布同步或打包，不改产品实现。
+4. 核验 Chat 已完成的按风险分级的必要测试证据；若证据缺失，先从精确 SHA 对应 CI、已有测试产物或 checkpoint 找回。确实缺少必需证据则记录缺项，暂停该发布动作。禁止因 Sites 故障要求 Chat 重复开发或重测。
 5. 只核验现有 PR、Merge 和 CI 证据；Work 不创建或更新 PR、不提交或合并代码。未合并 PR 不得擅自作为生产发布来源。
 6. 部署前说明源 Commit、修改范围、测试结果、生产风险和回滚方案。破坏性迁移或高风险生产变更须先获得我明确批准。
-7. 在具备权限且满足部署条件后，更新【现有 Site】，保留原 URL、生产数据、数据库标识与序列、配置、Secrets、访问权限和既有功能。
+7. 从第一个未完成的阶段继续。核实原 Site ID 和绑定来源，按授权同步精确源码或提交受支持的产物并回读对应关系，Save Version 后回读版本及来源，再 Deploy 到同一 Site 并确认激活状态。保留 URL、生产数据、数据库标识与序列、配置、Secrets、访问权限和既有功能。
 8. 部署后实际验证 Site URL、功能行为、验收标准、数据完整性、关键配置和访问权限；不得仅凭 GitHub merge 推断部署成功。
-9. 将 Sites 实际发布和验证证据返回 Chat，由 Chat 负责按项目状态规则更新 GitHub PROJECT_STATUS.md；Work 不提交 GitHub。
+9. 报告实际发布和验证证据。若约定由 Chat 维护 PROJECT_STATUS.md，仅交付证据供状态回写，发布任务留在 Work。Work 不提交 GitHub。
 10. 最终报告：Commit/PR 链接、测试结果、实际部署源 Commit、Site 版本、部署时间和时区、Site URL、验证证据、未完成事项与下一步。
 
 【禁止事项】
@@ -176,7 +188,7 @@ PRD 文件：【PRD Path】
 - 不得把未确认需求变成已批准功能。
 - 不得无授权删除生产数据、重置编号、替换 Site、修改访问权限。
 - 不得编造测试、部署或验证结果。
-- 遇到权限不足、工具不支持、冲突或重大风险时，暂停相应操作并说明原因。
+- 单一路径失败时保存 checkpoint，按 Recovery §0.2 尝试其余合法路径。仅在全部适用路径经核实失败或缺少必要用户授权时标记剩余阶段 BLOCKED。冲突或发布状态不明时先只读核查，重大风险按授权边界暂停相应动作。
 
 【Work 对话命名｜最后一条指令】
 请将当前 ChatGPT Work 对话的标题修改为以 `Work | `（含前后空格规则中的末尾空格）开头，格式为：`Work | 【项目名称】 | 【任务摘要】`。如果标题已以 `Work | ` 开头，不要重复添加前缀。若当前界面或工具不支持实际重命名，请明确说明无法修改，不得声称已修改成功。
@@ -205,7 +217,7 @@ PRD 文件：【PRD Path】
 - [ ] 指令包含 GitHub、PRD、Commit、现有 Site、功能与验收范围。
 - [ ] 区分 PRD 更新、代码实现、测试、部署、验证。
 - [ ] 保护生产数据、配置、URL、权限。
-- [ ] 明确风险确认、失败暂停、回滚与状态回写。
+- [ ] 明确授权边界、备选路径、停止条件、回滚与状态回写。
 - [ ] 不声称 Work 已执行或 Sites 已更新。
 - [ ] 已确认真实业务终点；如 User confirmed — no deploy needed，停止额外发布。
 - [ ] 已核对精确 Head 的 Actions（若适用），并分别标记 Sites source mapping unverified、No new Sites version published 等状态。

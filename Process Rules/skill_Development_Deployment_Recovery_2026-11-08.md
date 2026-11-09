@@ -1,19 +1,19 @@
 ---
 name: development-deployment-recovery
 description: 用户要求建立或执行开发、测试、发布的故障恢复与断点续跑机制时使用。
-version: '2.1'
+version: '2.2'
 updated: '2026-11-09'
 ---
 
 # Development & Deployment Recovery — 自动恢复与可验证交付
 
-> **按需启用**：当用户明确要求恢复失败的开发/部署任务、制定自动恢复 SOP、安装 CI/Checkpoint/Manifest，或当前 Sites 部署已经失败需要恢复时读取。本文件不意味着 GitHub Actions、Sites 自动部署接口或测试环境已经存在。通用安全边界见仓库根目录 `AGENTS.md`。
+> **按需启用**：当用户明确要求恢复失败的开发/部署任务、制定自动恢复 SOP、安装 CI/Checkpoint/Manifest，或当前 Sites 发布预检、同步或部署出现缺口时读取。本文件不意味着 GitHub Actions、Sites 自动部署接口或测试环境已经存在。通用安全边界见仓库根目录 `AGENTS.md`。
 
 ## 0. 跨项目开发、测试与部署 SOP v2
 
 本 SOP 适用于 React、Next.js、Node.js、Cloudflare Worker、GitHub、ChatGPT Sites 等项目，但具体命令和发布机制必须依据目标仓库的真实技术栈。**Chat First, Work Last；Historical Success First；Risk-Based Testing；Cloud First；Resume from Checkpoint；Verify Real Results。**
 
-**主动生成 Work 指令**：只要用户目标包含 Sites 发布/更新/上线，Chat 完成必要开发、测试和 GitHub 工作后，必须主动在当前 Chat 输出完整可复制的 Work 部署指令，**不得等待用户再次提醒**。若 Chat 已能合法完成实际发布，则以实际发布结果为准；不把 Work 指令当成发布成功。不自动转交 Work，不要求 Work 重新开发或重测已验证功能。若有阻塞，记录真实 checkpoint，仅交接 Work 可执行的剩余步骤。
+**主动生成 Work 指令**：只要用户目标包含 Sites 发布/更新/上线，Chat 完成必要开发、测试和 GitHub 工作后，若剩余步骤需 Work 且 Work 有经核实的能力，则主动在当前 Chat 输出完整可复制的 Work 部署指令，**不得等待用户再次提醒**。若 Chat 已能合法完成实际发布，则以实际发布结果为准；不把 Work 指令当成发布成功。不自动转交 Work，不要求 Work 重新开发或重测已验证功能。若有阻塞，记录真实 checkpoint，仅交接 Work 可执行的剩余步骤。
 
 **责任划分**：AI 在已授权工具范围内负责需求、PRD、UI、代码、GitHub、CI、测试环境选择、测试、诊断、故障恢复、部署和线上核验；用户负责业务需求、重大范围决策、不可逆风险批准、平台必要授权和最终验收。优先使用已连接的云端工具，不默认要求用户安装 Node、Chromium、Playwright、Git、Docker，或手动执行 Git 命令、配置测试环境、处理 DNS、复制构建产物。不能绕过平台授权，也不能凭空声称工具可用。
 
@@ -23,7 +23,7 @@ updated: '2026-11-09'
 
 **云端部署**：确认原 Site、目标 SHA、历史可用发布路径和保护要求；区分 GitHub Commit 与 Site Source Commit，必要时先同步源码、读取真实 Site Source HEAD、构建 Worker（仅项目实际使用时）、保存 Site Version、部署 Production，再核验 URL、版本、Deployment ID（平台提供时）、受影响功能、权限和数据保护状态。Save Version ≠ Deploy；CI Passed ≠ Production Deployed。可能已有副作用的发布操作必须先查实际状态再重试。
 
-**恢复和停止**：按真实证据推进 REQUIREMENTS_CONFIRMED → SOURCE_VERIFIED → IMPLEMENTED → TESTED → COMMITTED → SOURCE_SYNCED（适用时）→ BUILT（适用时）→ DEPLOYED → PRODUCTION_VERIFIED → DONE；用户最终验收另记 USER_ACCEPTED。仅从最后未完成阶段恢复，保留 SHA、测试、Site Version、部署证据和错误类别。达到用户要求的终点即停止，不追加无关测试、文档、审批或基础设施变更。
+**恢复和停止**：按真实证据推进 REQUIREMENTS_CONFIRMED → SOURCE_VERIFIED → IMPLEMENTED → TESTED → COMMITTED → SOURCE_SYNCED（适用时）→ BUILT（适用时）→ VERSION_SAVED → DEPLOYED → PRODUCTION_VERIFIED → DONE；用户最终验收另记 USER_ACCEPTED。仅从最后未完成阶段恢复，保留 SHA、测试、Site Version、部署证据和错误类别。达到用户要求的终点即停止，不追加无关测试、文档、审批或基础设施变更。
 
 **已提供的历史成功案例（非当前平台核验）**：用户提供的 Work 执行记录称 `jaronhoh/margin-share-calculator` 的 BUG-UI-005 在 GitHub Source `3542177059ed72a52d71f23e8df2d585991a3cb3`、Site Source `8c1d5ed`、Production Version 2、Deployment ID `appgdep_6af0da067d908191b3b42f37866bead8` 成功发布至 `https://margin-share-calculator.jaron-hoh.chatgpt.site/`，保留 Owner-only，并完成 1440/390/320px 和 Light/Dark 检查。**证据等级：User-provided Work execution report；未经本次实时核验。** 此记录可用于调查同项目后续部署，但不代表其他 Sites 具有相同接口。该项目曾使用 `node tools/build-site-worker.mjs`，不应推广为其他项目的通用命令。
 
@@ -37,26 +37,36 @@ updated: '2026-11-09'
 
 **替代执行路线**：需要运行 Node、Worker、Chromium 等测试时，先核对精确源码 SHA 对应的现有 GitHub Actions、可用的云端执行工具及既有工作区。若允许通过 GitHub 连接器安全修改 workflow 触发必要测试，可按项目现有 CI 规则执行；不得为了测试而修改生产逻辑或虚构通过结果。任何可用的其他环境都必须经过真实能力确认，不能假设存在。
 
-**分项继续，不得整体停工**：把工作拆为 `CONNECTOR_READ`、`AUDIT`、`IMPLEMENT`、`CI_TEST`、`SITES_DEPLOY`、`PRODUCTION_VERIFY`。一个阶段的某项环境依赖失败，仅标记该项 `BLOCKED`，继续其他独立且安全的任务；不能因克隆失败直接宣称全部未开始。保留每项真实证据和最后成功 checkpoint。
+**分项继续，不得整体停工**：把工作拆为 `CONNECTOR_READ`、`AUDIT`、`IMPLEMENT`、`CI_TEST`、`SITES_DEPLOY`、`PRODUCTION_VERIFY`。一个阶段的某项环境依赖失败，先记录该路径失败，继续其他独立且安全的任务；不能因克隆失败直接宣称全部未开始。保留每项真实证据和最后成功 checkpoint。
 
 **禁止伪保证**：Skill 无法更改平台沙箱 DNS、绕过必要授权或保证新会话自动读取。若所有合法执行路径均不可用，明确说明唯一不可替代的阻塞；不要向用户重复提出已经失败且没有新条件的操作。
+
+## 0.2 Sites 绑定源码失败与发布断点续跑
+
+开发前按 [PRD → GitHub → Sites §3.1](skill_PRD_GitHub_Sites_Update_2026-11-05.md#31-既有-sites-发布路径预检开发前) 预检。对 GitHub 已合并、CI 已通过的 Margin Share Calculator 类任务，先验证证据对应目标 SHA，再从未完成的 Sites 阶段续跑。GitHub 可读可写、CI PASS、`hosting.json` 或历史成功记录都无法单独证明当前 Site 的源码绑定、写入能力或上线状态。
+
+1. **判定真实状态**。实时读取原 Site ID、URL、Production 版本、实际绑定源/分支/HEAD 和可用工具。核对已保存版本和部署状态，避免重复同步、Save 或 Deploy。将失败定位到目标识别、source 写入、构建、保存、激活或验收。脱敏记录工具、错误、时间和失败路径。
+2. **逐一排查适用备选路径**。优先复用同一 Site 有证据且仍可用的发布路径。若已存在来源可核实且与待发布 SHA 对应的已保存版本，从 Deploy 或 Production 验收继续。否则核对是否可通过原 Site 的受支持源码同步工具或平台提供的限时、限范围凭证，同步到已核实的绑定源。若该路径失败，再检查同一 Site 是否支持从固定 GitHub SHA 构建并经原生入口保存可追溯产物，或通过已授权的官方界面完成同一步。每条路径记录已验证、已排除及理由。界面、凭证、CLI 和 API 只有当前环境实际提供且获授权才可使用，禁止猜测内部接口、复用他人凭证或泄露密钥。
+3. **约束写入与重试**。同步前读取目标 HEAD，保留非本次变更，核实源码或产物对应待发布 SHA。同步后回读实际来源。Save 后回读版本、目标和来源，Deploy 后读取激活状态，再做 Production 验收。若入口将 Save 和 Deploy 合并，须在调用前确认两项授权，调用后分别核验证据。结果不明时先查询状态，禁止重复生产写入；无新证据不重试相同路径。发布保持原 Site、URL、数据、配置、Secrets 和访问权限，生产验收以获授权的只读检查为限。新增或替换 Site、改绑源、权限放宽、生产数据写入或破坏性操作需单独明确授权。
+4. **保留 checkpoint，避免循环交接**。分别记录 GitHub SHA/PR、CI 或测试链接、Site ID/URL、绑定源和同步后 SHA 或产物摘要、Save Version ID、Deployment ID/状态（如提供）、线上版本及验收结果。Work 从第一个未完成阶段继续，执行授权的发布准备、诊断和线上核验，复用有效测试，不把部署故障推回 Chat 重做开发或测试。仅在另一环境具有经核实的不同能力且能推进剩余步骤时交接一次，附 checkpoint 与已排除路径。
+5. **停止条件**。只有全部适用合法路径均已验证失败或不可用，或剩余动作确实需要用户新增授权，才将该阶段标记 `BLOCKED`。继续其他独立且已授权步骤，报告最后成功阶段、具体证据、各路径排除理由以及最小下一步。若线上仍是旧版本或无法核验，分别如实记录。达到请求的验收终点即停止。
 
 ## 1. 目标与责任
 
 用户提出需求、决定重大业务范围、完成最终产品验收；AI 在现有授权和可用工具内负责需求分析、PRD、源码与分支、代码修复、冲突处理、适用的 Node/Worker/Chromium 测试、日志诊断、GitHub、部署证据及安全恢复。用户只在必要的账户授权、生产数据风险或不可逆决策时介入。**一次工具失败不等于任务失败；不要让用户处理 checkout、依赖安装、测试环境或日志。**
 
 - **Chat**：需求、开发、测试、修复、GitHub 和恢复点维护。安全且可逆的操作自动继续。
-- **Work**：仅用户要求 ChatGPT Sites 部署时，在**当前 Chat 输出完整可复制的 Work 指令**，由用户决定是否使用；不得自动切换模式、创建 Work 任务或把开发/测试移交 Work。
+- **Work**：仅当用户要求 ChatGPT Sites 部署、当前 Chat 无法完成且 Work 具备经核实的能力时，在**当前 Chat 输出完整可复制的 Work 指令**，由用户决定是否使用；不得自动切换模式、创建 Work 任务或把开发/测试移交 Work。
 - 平台若无可用 API、连接器、权限或部署工具，不得声称能自动部署；生成指令不等于执行或成功。
 
 ## 2. 五层防故障机制
 
 | 层 | 何时检查 | 自动动作 | 成功证据 |
 |---|---|---|---|
-| 环境预检查 | 开始相关阶段前 | 按需检查 GitHub 仓库/分支/SHA、可用工作区、Node/Worker/Chromium 依赖；若本次要求发布，检查 Sites 入口和权限 | 可读取的 HEAD、环境版本或可执行测试、已确认的发布入口 |
+| 环境预检查 | 开始相关阶段前 | 按需检查 GitHub 仓库/分支/SHA、可用工作区、Node/Worker/Chromium 依赖；若本次要求发布，开发前按 §0.2 核验整条 Sites 路径 | 可读取的 HEAD、环境版本或可执行测试、已确认的发布入口 |
 | 自动恢复 | checkout 不存在、会话中断、网络瞬断 | 从 GitHub 重新读取目标 SHA、重新建立临时工作区、检查已完成的 Commit/CI，跳过已通过阶段 | 恢复后 SHA 与 checkpoint 一致 |
 | 测试隔离 | 测试失败 | 分类代码失败、测试失败、依赖/环境故障；修复可恢复的依赖/启动问题，再跑受影响测试 | 真实测试命令、退出码、日志、重测结果 |
-| 部署前检查 | 准备发布 | 验证目标原 Site、待发布来源、必要权限、生产保护和最小发布范围 | Deployment Gate 满足；缺少能力则记录阻塞 |
+| 部署前检查 | 准备发布 | 验证目标原 Site、待发布来源、必要权限、生产保护和最小发布范围 | Deployment Gate 满足；缺少能力则按 §0.2 核验备选路径 |
 | 部署后核验 | 发布操作后 | 读取平台发布结果、Deployment ID/版本（若提供）、健康状态、受影响功能和权限 | 真实生产证据；GitHub Commit 不可代替 |
 
 按变更风险选择测试：文案/样式仅局部和相关响应式；交互检查键盘/触摸/Tooltip；财务逻辑检查单元、边界、图表与导出；数据/权限变更扩大到隔离、完整性和回滚。不要把所有任务强制升级为全站测试。
@@ -69,6 +79,9 @@ REQUIREMENTS_CONFIRMED
   -> IMPLEMENTED
   -> TESTED
   -> COMMITTED
+  -> SOURCE_SYNCED (if applicable)
+  -> BUILT (if applicable)
+  -> VERSION_SAVED
   -> DEPLOYED
   -> PRODUCTION_VERIFIED
   -> DONE
@@ -95,7 +108,7 @@ REQUIREMENTS_CONFIRMED
 | Node/Worker/Chromium 失败 | 检查日志和依赖；隔离环境/代码故障，修复可逆环境问题并重测 | 缺少不可替代的运行能力 |
 | 暂时网络错误 | 对只读、幂等操作有限退避重试（默认最多 2 次）；检查实际结果后再决定 | 连续失败或出现非瞬时错误 |
 | GitHub 写入冲突 | 重新读取 HEAD/文件 SHA，保留他人变更并合并；不强推覆盖 | 无法安全合并 |
-| Sites 部署错误 | 检查目标、来源、权限、发布状态和健康日志；先诊断后考虑受控重试 | 无新证据、状态不明、风险不可控 |
+| Sites 部署错误 | 按 §0.2 诊断、核查状态并尝试合法备选路径 | 全部适用路径排除或需要新增用户授权 |
 | 权限拒绝 | 检查已有合法连接/授权范围；说明缺失的最小权限 | 需要用户或平台批准；禁止绕过 |
 
 **重试安全性**：只读/幂等步骤可有限重试；GitHub 写入和 Sites 发布可能已生效，**必须先查询结果并防止重复副作用**。不得对未知状态的生产发布机械重试。若新证据表明原已保存版本可发布、平台恢复或用户明确授权，可做一次受控重试并验证，不将第一次失败永久视为不可恢复。
@@ -121,12 +134,12 @@ REQUIREMENTS_CONFIRMED
 
 ## 7. Work 部署指令输出模板（仅在用户要求发布时）
 
-**不等待用户第二次提醒**：只要本次任务的明确终点包含 Sites 部署，Chat 侧准备完成后自动在当前 Chat 输出：目标原 Site、精确 GitHub SHA 或已保存版本、已验证测试与未验证项、部署范围、保留 URL/数据/配置/权限要求、单次发布步骤、生产最小核验、Deployment ID/版本可得性、失败诊断和恢复 checkpoint。**不要命令 Work 重新开发、修复源码或重跑整个测试矩阵。** 用户自行决定是否使用；输出指令不是发布。
+**不等待用户第二次提醒**：只要本次任务的明确终点包含 Sites 部署，Chat 侧准备完成且 Work 有经核实的能力执行剩余步骤时，在当前 Chat 输出：目标原 Site、精确 GitHub SHA 或已保存版本、已验证测试与未验证项、部署范围、保留 URL/数据/配置/权限要求、单次发布步骤、生产最小核验、Deployment ID/版本可得性、失败诊断和恢复 checkpoint。**不要命令 Work 重新开发、修复源码或重跑整个测试矩阵。** 用户自行决定是否使用；输出指令不是发布。
 
 ## 8. DONE 标准与停止条件
 
 - 代码阶段：实现目标、实际执行适用测试、检查结果、修复失败、复测、提交并核对 SHA；不能运行的检查明确标记 `not run`。
 - 部署在范围内：必须另有实际 Sites 发布证据与生产功能/权限核验，才能称为 `PRODUCTION_VERIFIED`。
 - 用户最终产品验收独立记录为 `User accepted`；不假设 AI 能替用户签收。
-- 如果平台授权、连接器或运行能力是唯一剩余阻塞：保留成果、checkpoint、精确阻塞与下一步，报告 `BLOCKED`，而非 `DONE`。
+- 如果全部适用合法路径均已排除，或剩余步骤需要用户新增授权：保留成果、checkpoint、精确阻塞与下一步，报告 `BLOCKED`，而非 `DONE`。
 - 达到用户指定终点后停止，不重复开发、不追逐版本号、不增加无关测试或文档门槛。

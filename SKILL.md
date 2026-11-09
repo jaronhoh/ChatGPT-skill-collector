@@ -1,7 +1,7 @@
 ---
 name: skill-collector-router
-description: 根据明确任务选择远程 Skill；包含 Sites 发布目标时主动触发部署交接。
-version: '2.1'
+description: 根据明确任务选择远程 Skill；包含 Sites 发布目标时先核验发布路径，再按需执行部署或交接。
+version: '2.2'
 updated: '2026-11-09'
 ---
 
@@ -17,17 +17,17 @@ updated: '2026-11-09'
 | 明确导出、恢复或校验对话交接 JSON；单独输入「继续对话」 | [Continue Conversation](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Continue_Conversation_2026-11-05.md) |
 | 用户目标包含 Sites 上线、更新生产、部署或发布（无需再次要求 Work 指令） | [PRD → GitHub → Sites](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_PRD_GitHub_Sites_Update_2026-11-05.md) |
 | 明确输入 Ponytail 模式或 ponytail-review/audit/debt | [Ponytail](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) |
-| 明确要求故障恢复/断点续跑/CI，或已有部署失败需要恢复 | [Development & Deployment Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
+| 明确要求故障恢复/断点续跑/CI，或发布预检、同步、部署需要恢复 | [Development & Deployment Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
 | 明确查询、更新项目状态文件或跨项目交接 | [Project Handoff](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md) |
 | 企业系统架构设计、设计文档或跨模块设计评审 | [Enterprise System Design](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/System%20Design/skill_Enterprise_System_Design_2026-11-05.md) |
 
-## 主动 Work 指令触发（必须）
+## Sites 发布前置核验与按需 Work 交接
 
 只要当前任务的**明确交付终点包含 ChatGPT Sites 部署**，即使用户只说「修复并上线」「继续完成 Production」「部署到原 Site」，也必须主动加载上表 PRD → GitHub → Sites Skill；如果涉及失败恢复，再按需加载 Recovery Skill。**不要求用户再次提醒「给我 Work 指令」。**
 
-Chat 负责完成已授权的开发、风险适配测试、GitHub 提交和证据核验。若当前 Chat 无法直接执行 Sites 部署，则在这些步骤完成后**主动在当前回复输出完整可复制的 Work-only 指令**，包括精确源码 SHA、测试证据、现有 Site、保护约束、部署步骤、Production 验证与失败恢复；不自动创建 Work 任务，也不把 Work 指令称为已部署。
+开发前按发布 Skill §3.1 核实原 Site ID、实际绑定源码与同步能力、Save Version、Deploy 和 Production 验收入口。已完成开发的任务从第一个未完成的发布阶段继续。Chat 负责已授权的开发、风险适配测试、GitHub 提交和证据核验。若当前 Chat 无法直接完成 Sites 发布，且 Work 有经核实的剩余步骤执行能力，则在这些步骤完成后**主动在当前回复输出完整可复制的 Work-only 指令**，包括精确源码 SHA、测试证据、现有 Site、保护约束、部署步骤、Production 验证与失败恢复；不自动创建 Work 任务，也不把 Work 指令称为已部署。
 
-若 Chat 端仍有阻塞，报告真实 checkpoint，不捏造已通过测试；可针对 Work 实际可执行的剩余工作给出受限交接。用户只要求 GitHub/文档而未要求发布时，不额外生成 Work 指令。
+若发布路径失败，加载 Recovery §0.2，从 checkpoint 尝试实际可用且获授权的备选路径。仅在 Work 有可核实的不同能力时交接剩余步骤。Work 不因发布失败把同一任务推回 Chat 重做开发或测试。用户只要求 GitHub/文档而未要求发布时，不额外生成 Work 指令。
 
 ## GitHub Remote Skill Loader v2
 

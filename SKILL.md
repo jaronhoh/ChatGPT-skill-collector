@@ -49,3 +49,6 @@ updated: '2026-11-09'
 
 ## v3 路由验证
 路由命中不等于 Skill 已加载。执行者须实际读取对应文件，记录路径与版本；加载失败如实报告。Sites 正常发布只按 Sites Skill 执行；发生可证实的发布故障才加载 Recovery Skill，并从已有 checkpoint 继续。不得因关键词相似而加载全部 Skill。
+
+## GitHub-only 路由优先级（强制；2026-11-09）
+若用户的交付终点仅是 GitHub 仓库/文件/Commit/PR/CI 更新、审查或合并，直接在当前 Chat 使用已授权 GitHub Connector；**不得触发 Work 交接，也不得因仓库名称、文档内容出现 Sites/Work 字样而触发 Sites Skill**。只有用户明确要求发布/更新实际 ChatGPT Site，才命中 Sites 发布路由。GitHub Connector 失败先在 Chat 分类并恢复；失败不能自动转交 Work。用户明确指定 Chat-only 时，不主动询问是否使用 Work。此条优先于本路由中任何模糊的交接表述。

@@ -45,3 +45,7 @@ updated: '2026-11-09'
 2. 不因为 Skill 里提到 GitHub、测试、UI、NocoBase 或 Sites 就额外激活其他 Skill。
 3. 遵守 Project 中上传的 `AGENTS.md` 的执行边界和完成标准；如某个旧 Skill 仍包含过时的全局要求，以 AGENTS.md 的通用边界及用户当前明确指令为准。
 4. 保持原有九个 Skill 的 GitHub 路径；只有命中任务才读取对应远程文件。
+
+
+## v3 路由验证
+路由命中不等于 Skill 已加载。执行者须实际读取对应文件，记录路径与版本；加载失败如实报告。Sites 正常发布只按 Sites Skill 执行；发生可证实的发布故障才加载 Recovery Skill，并从已有 checkpoint 继续。不得因关键词相似而加载全部 Skill。

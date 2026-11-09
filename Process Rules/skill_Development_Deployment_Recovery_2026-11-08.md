@@ -151,3 +151,7 @@ REQUIREMENTS_CONFIRMED
 - 用户最终产品验收独立记录为 `User accepted`；不假设 AI 能替用户签收。
 - 如果全部适用合法路径均已排除，或剩余步骤需要用户新增授权：保留成果、checkpoint、精确阻塞与下一步，报告 `BLOCKED`，而非 `DONE`。
 - 达到用户指定终点后停止，不重复开发、不追逐版本号、不增加无关测试或文档门槛。
+
+
+## v3 故障决策补充（优先于本文件较早的模糊表述）
+DNS 熔断以 `(hostname, execution environment, authorization state)` 为键，不得把 `github.com` 的失败推断为 `git.chatgpt-team.site` 失败。相同条件下不重复 clone/curl/权限申请；环境、授权或网络状态发生可验证变化时，允许一次有界、带超时的受控复测。连接器可用则继续独立阶段。仅在所有适用合法路径排除或确需新增授权时，才将具体阶段标记 BLOCKED，附最后成功 checkpoint、排除证据及最小恢复动作。历史 V3/V4 成功记录须分别保留；V4 用户发起的 Yahoo API 恢复不代表 Payment Date、CSV/JSON 均已独立验证。正常部署步骤由 Sites Skill 统一定义，本 Skill 只补充故障处理与恢复。

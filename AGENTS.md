@@ -32,3 +32,6 @@ The Project-uploaded `SKILL.md` contains the GitHub raw URLs and exact activatio
 
 ## v3 执行证据与范围保护（2026-11-09）
 每次任务先记录实际加载的规则文件及版本；未读取不得声称已遵守。现有功能默认 Preserve；仅对用户明确批准的功能 Change 或 Remove。开发、测试、GitHub 提交、Sites 保存版本、生产部署、线上核验及用户验收须分别依据真实证据标记；Work 指令不是部署结果。正常发布细节以 Sites Skill 为唯一权威，异常恢复以 Recovery Skill 为唯一权威。
+
+## GitHub Chat-Only Policy（强制；2026-11-09）
+用户要求读取、创建、修改、审查、提交、合并、同步或更新 GitHub 仓库时，默认在**当前 Chat 模式**使用已授权 GitHub Connector 完成。不得因 GitHub 操作、多个文件、Commit、PR、CI、代码修改、工具失败或仓库为空，主动询问、建议、要求或发起 ChatGPT Work 交接。Connector 失败时先分类错误、检查权限及安全替代操作；无法完成则准确报告，不以 Work 作为默认退路。**GitHub-only 任务不触发 Sites 预检、部署或 Work 指令。**仅用户明确要求 Sites 发布时才独立评估部署能力；用户明确要求全程 Chat 时不得主动提出 Work。平台强制工具限制仍须遵守，不能声称未执行的写入已经完成。

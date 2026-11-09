@@ -25,7 +25,17 @@ updated: '2026-11-09'
 
 **恢复和停止**：按真实证据推进 REQUIREMENTS_CONFIRMED → SOURCE_VERIFIED → IMPLEMENTED → TESTED → COMMITTED → SOURCE_SYNCED（适用时）→ BUILT（适用时）→ VERSION_SAVED → DEPLOYED → PRODUCTION_VERIFIED → DONE；用户最终验收另记 USER_ACCEPTED。仅从最后未完成阶段恢复，保留 SHA、测试、Site Version、部署证据和错误类别。达到用户要求的终点即停止，不追加无关测试、文档、审批或基础设施变更。
 
-**已提供的历史成功案例（非当前平台核验）**：用户提供的 Work 执行记录称 `jaronhoh/margin-share-calculator` 的 BUG-UI-005 在 GitHub Source `3542177059ed72a52d71f23e8df2d585991a3cb3`、Site Source `8c1d5ed`、Production Version 2、Deployment ID `appgdep_6af0da067d908191b3b42f37866bead8` 成功发布至 `https://margin-share-calculator.jaron-hoh.chatgpt.site/`，保留 Owner-only，并完成 1440/390/320px 和 Light/Dark 检查。**证据等级：User-provided Work execution report；未经本次实时核验。** 此记录可用于调查同项目后续部署，但不代表其他 Sites 具有相同接口。该项目曾使用 `node tools/build-site-worker.mjs`，不应推广为其他项目的通用命令。
+## 0A. Last Known Good Deployment — 必须优先复用的 SOP
+
+**目标**：已有 V1/V2 成功部署时，禁止每次从零研究、反复交接或只输出 BLOCKED。先恢复最后一次成功部署的**真实执行链**，而非仅查询当前 Sites API 能否显示 source repo。
+
+1. **找历史证据**：查原 Site 的 V1/V2 Version、Deployment ID、source provenance；查当时 Work 对话执行记录、工具调用、已保存源码、GitHub commit、构建产物与部署结果。区分「成功结果」与「确实使用过的操作方法」；无法访问历史执行日志时如实记录，绝不编造工具或命令。
+2. **复现同一路径**：按历史记录确认使用的实际 Sites 编辑/源码同步、构建、Save Version 和 Deploy 操作及其当前可用性；从上次成功 source/产物出发，仅替换本次已验证改动。不要把 GitHub commit SHA 直接冒充 Sites 绑定源码 HEAD。
+3. **路径优先级**：先检查现有已保存且可追溯的新版本；再检查 V2 实际使用的原生发布入口；再检查原 Site 已授权的源码/产物同步和浏览器管理入口。每种只检查一次有意义的路径；同一失败没有新条件不重试。
+4. **明确缺口**：只有历史执行链确实无法取得或已不可用、其他实际可用路径均排除后，才将**剩余发布阶段**标为 BLOCKED。不能把「某个 Sites 读取接口不返回绑定仓库」直接等同于「所有部署入口都不可用」。
+5. **部署验证**：保留原 Site ID/URL、Owner-only、配置和数据；核对同步后 source/产物、保存的新版本、Production Deployment ID、线上功能。GitHub 合并不等于上线。
+
+**Margin Share Calculator 的已知 V2 成功结果（仅结果，不是操作 SOP）**：用户提供的执行报告记载 GitHub BUG-UI-005 SHA `3542177059ed72a52d71f23e8df2d585991a3cb3`、Site Source SHA `8c1d5ed7d04dcda0e97ba435b554d9e13b517dee`、Production Version 2、Deployment `appgdep_6af0da067d908191b3b42f37866bead8`、原 URL `https://margin-share-calculator.jaron-hoh.chatgpt.site/`、Owner-only。曾用 `node tools/build-site-worker.mjs`；**尚无可核实的 V1/V2 逐步源码同步/Save/Deploy 工具调用记录，不能声称完整 SOP 已复现**。追溯到后再将实际步骤补入项目 Release Runbook。
 
 ## 0.1 强制防重复失败协议：空工作区 / GitHub DNS / 克隆失败
 
@@ -97,8 +107,6 @@ REQUIREMENTS_CONFIRMED
 3. 已通过的测试仅在 SHA、依赖、配置和受影响范围未改变且证据仍有效时复用；否则只重跑必要检查。
 4. 每完成一个有意义阶段更新 checkpoint。若无法写回仓库，在当前对话保留结构化恢复摘要，不声称持久化成功。
 5. 外部阻塞时保留 SHA、最后成功阶段、错误证据和唯一下一动作；下次不重头开发。
-
-**BUG-UI-005 示例**：先核实 `jaronhoh/margin-share-calculator` 的 `2730e7a5` 是否存在、是否包含目标修复、其 CI/测试和是否已上线；只有证据显示仍需改代码才创建新修复分支。该 SHA 是用户提供的恢复候选，**不是已验证通过的版本**。
 
 ## 4. 故障分类与有限恢复
 

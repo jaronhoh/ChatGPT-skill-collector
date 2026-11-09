@@ -234,3 +234,6 @@ PRD 文件：【PRD Path】
 
 **尚未完成的动作**：开发、测试、Sites 部署、生产验证的真实状态及下一步。
 
+
+## v3 发布保护与证据补充（优先于本文件较早的模糊表述）
+发布前建立本次变更契约：Preserve（默认保留的既有功能与集成）、Change（明确修改）、Remove（用户明确批准删除）。核对 GitHub Commit、现有 Sites 绑定 Source HEAD、待发布源码/产物及差异；SHA 可以不同，但必须证明来源映射、兼容性及同步后 HEAD/产物一致，不能用 GitHub 绿色 CI 代替 Sites 生产验证。同步不得以较旧 GitHub 树覆盖 Sites 独有有效功能。只复用与源码、依赖、配置及风险相匹配的测试。Save Version、Deploy、Production Verified、User Accepted 分别记录。Work 只接收未完成的部署阶段，不重复已验证开发与测试；Work 指令不是已部署。异常故障分类与恢复条件以 Recovery Skill 为准。

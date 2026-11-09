@@ -1,37 +1,21 @@
-# Agent Instructions
+# Agent Instructions — v4.0
 
-This repository is a collection of reusable guidance files, not an application runtime. Existing `skill_*.md` paths remain stable entry points for users who have already imported them.
+This repository contains reusable, opt-in guidance, not executable automation. Existing nine Skill paths remain stable. These rules do not override platform/tool restrictions.
 
-## Scope and loading
+## Scope and priority
+1. Follow the user's actual requested endpoint and explicit mode preference; do not infer Sites deployment from GitHub updates.
+2. Read only the matched Skill via `SKILL.md`; record path and version actually loaded. File existence or a router link is not proof of loading. If unavailable, disclose it.
+3. Preserve existing functionality and project data by default. Classify proposed changes as **Preserve / Change / Remove**; Remove requires explicit user authorization.
+4. Do not apply PM/PRD, Ponytail, C2C, architecture, handoff or deployment procedures to ordinary tasks unless explicitly matched.
 
-- Start from the user's actual task. Use the Project-uploaded `SKILL.md` router to read only the matching GitHub-hosted Skill and its task-specific sections; do not read every Skill, architecture guide, database guide, or deployment guide by default.
-- Skills are opt-in workflows, not global constraints. A generic coding request does not activate PM Make, PRD Make, Ponytail, C2C, Project Handoff, or deployment guidance.
-- User instructions and the target project's verified constraints take precedence over these reusable defaults. Keep framework-specific commands out of framework-agnostic work.
-- Do not assume this repository's instructions automatically apply to other GitHub repositories or to ChatGPT Project settings; they must be installed or explicitly referenced.
+## GitHub Chat-Only Policy
+GitHub reads, edits, commits, PRs, merges, reviews and available CI operations are performed in the current **Chat** with an authorized GitHub Connector. Do not ask, suggest or initiate Work because a task involves GitHub, many files, code, CI, a failed clone or a missing checkout. Diagnose connector errors and use safe authorized alternatives in Chat; if blocked, report the precise missing permission/capability and checkpoint. GitHub-only tasks **never** trigger Sites preflight or Work instructions. Respect any platform-enforced limitation; never fabricate a write.
 
-## Execution and decisions
+## Sites boundary
+Only an explicit request to deploy/update an actual ChatGPT Site activates the Sites Skill. Development, testing and GitHub remain Chat-first. Separate GitHub HEAD, Sites bound source HEAD, artifact digest, saved Site version, production deployment and user acceptance. If a necessary Sites operation is unavailable in Chat, report the specific remaining gate and verified capability; do not treat a handoff instruction as deployment. Never auto-switch modes or re-run completed work. An explicit user refusal of Work is binding for the current task.
 
-- **Chat-first**: requirements, design, implementation, fixes, relevant tests, review and GitHub updates are handled in the current Chat conversation with available authorized tools. Use Codex as a separate execution tool only when applicable, not as an excuse to stop work.
-- **Sites preflight and Work handoff**: before implementing a change whose requested endpoint includes Sites, verify the release path and current tool capabilities using the matched Sites Skill. For an already implemented change, start at the first unfinished release gate. when the user's stated delivery goal includes ChatGPT Sites deployment (even when they only say 'fix this and ship' or 'continue to production'), if Chat cannot finish the release and Work has a verified capability for the remaining steps, **proactively** provide a complete, copyable Work-only deployment instruction **in the current Chat immediately after Chat-side development, relevant tests and GitHub work are ready**. Do not wait for the user to ask for the instruction a second time. Do not automatically switch modes or create a Work conversation. Work owns authorized release recovery once started, reuses valid development evidence, and never sends a deployment failure back to Chat for repeated development or testing. Generating instructions is not deployment. If Chat-side work is blocked, provide a factual recovery checkpoint and a Work instruction only for remaining operations Work can actually perform; never fabricate a passing SHA or tests.
-- Proceed independently on authorized, reversible local edits, disposable local test data, read-only inspection, routine test runs, and fixes within the approved scope. Do not pause for permission after every safe step.
-- Ask before materially changing product scope, exposing secrets, accessing or modifying production data, destructive/irreversible operations, merging into protected branches, or publishing/deploying to production when not explicitly authorized. Never bypass permissions or fabricate tool capabilities.
-- Prefer the existing repository structure, conventions and compatible components. For a new React UI, consider shadcn/ui where suitable; do not force it on other stacks.
+## Verification and completion
+Reuse tests only when source, dependencies, configuration and risk scope still match; otherwise test the changed behavior and affected regression paths. Documentation-only changes require structure, route, reference and contradiction checks plus remote readback. Every status must distinguish **Verified / User-reported / Not verified / Blocked**. A GitHub commit is not a Site deployment; Save Version is not Deploy; deployment is not user acceptance. Stop at the user's requested endpoint.
 
-## Done means done
-
-For implementation tasks: on a tool failure, first diagnose and attempt safe, bounded recovery; preserve the last verified SHA and stage rather than restarting completed work. When the user explicitly requests an automatic recovery workflow, use the remote Development & Deployment Recovery URL in the Project's `SKILL.md` router; only claim it was loaded after a successful remote read. Implement the requested behavior → run the relevant code or tests where tools allow → inspect actual results → fix failures introduced by the change → rerun affected verification. Continue until acceptance criteria are met or a concrete external blocker remains. No mandatory full-suite reruns for a small reversible edit; use risk-proportionate checks. Report unexecuted checks as unverified, not passed.
-
-For documentation-only changes: validate file syntax, paths, links, scope, and conflicting instructions; confirm GitHub writes by reading the committed files. Do not invent runtime tests for a Markdown-only repository.
-
-For deployment tasks: reuse verified previous successful deployment paths and valid tests; choose available cloud tools before asking the user to install local dependencies. Diagnose bounded failures without repeating unchanged unsuccessful actions. Distinguish GitHub committed, CI verified, Sites deployed and production verified. Preserve existing Site URL, data, configuration, secrets and permissions. Stop when the user's requested outcome is met; do not add unrelated release gates. A failed deployment requires evidence-based diagnosis and checkpoint preservation; never assume commit equals production. Continue through applicable authorized alternatives after an individual route fails. Mark only the remaining stage BLOCKED once all applicable routes have been ruled out with evidence or an indispensable user authorization is missing.
-
-## Task-specific references
-
-The Project-uploaded `SKILL.md` contains the GitHub raw URLs and exact activation criteria. Fetch only a matched Skill using available authorized tools; record the actual GitHub commit SHA for reproducible work when needed. If the remote read fails, say the Skill was not loaded and continue only with verified local instructions. Uploading `AGENTS.md` and `SKILL.md` does not itself grant network/GitHub access or register native Skills. These Project copies do not automatically update when GitHub changes; re-upload them after router/global-rule edits. Read further references only when relevant.
-
-
-## v3 执行证据与范围保护（2026-11-09）
-每次任务先记录实际加载的规则文件及版本；未读取不得声称已遵守。现有功能默认 Preserve；仅对用户明确批准的功能 Change 或 Remove。开发、测试、GitHub 提交、Sites 保存版本、生产部署、线上核验及用户验收须分别依据真实证据标记；Work 指令不是部署结果。正常发布细节以 Sites Skill 为唯一权威，异常恢复以 Recovery Skill 为唯一权威。
-
-## GitHub Chat-Only Policy（强制；2026-11-09）
-用户要求读取、创建、修改、审查、提交、合并、同步或更新 GitHub 仓库时，默认在**当前 Chat 模式**使用已授权 GitHub Connector 完成。不得因 GitHub 操作、多个文件、Commit、PR、CI、代码修改、工具失败或仓库为空，主动询问、建议、要求或发起 ChatGPT Work 交接。Connector 失败时先分类错误、检查权限及安全替代操作；无法完成则准确报告，不以 Work 作为默认退路。**GitHub-only 任务不触发 Sites 预检、部署或 Work 指令。**仅用户明确要求 Sites 发布时才独立评估部署能力；用户明确要求全程 Chat 时不得主动提出 Work。平台强制工具限制仍须遵守，不能声称未执行的写入已经完成。
+## Sources and Project copies
+`SKILL.md` routes to remote Markdown; remote files must be actually read. Project-uploaded `AGENTS.md` and `SKILL.md` are static snapshots and must be refreshed after changes. Do not claim these files install native Skills, connectors or background automation.

@@ -28,3 +28,7 @@ For deployment tasks: reuse verified previous successful deployment paths and va
 ## Task-specific references
 
 The Project-uploaded `SKILL.md` contains the GitHub raw URLs and exact activation criteria. Fetch only a matched Skill using available authorized tools; record the actual GitHub commit SHA for reproducible work when needed. If the remote read fails, say the Skill was not loaded and continue only with verified local instructions. Uploading `AGENTS.md` and `SKILL.md` does not itself grant network/GitHub access or register native Skills. These Project copies do not automatically update when GitHub changes; re-upload them after router/global-rule edits. Read further references only when relevant.
+
+
+## v3 执行证据与范围保护（2026-11-09）
+每次任务先记录实际加载的规则文件及版本；未读取不得声称已遵守。现有功能默认 Preserve；仅对用户明确批准的功能 Change 或 Remove。开发、测试、GitHub 提交、Sites 保存版本、生产部署、线上核验及用户验收须分别依据真实证据标记；Work 指令不是部署结果。正常发布细节以 Sites Skill 为唯一权威，异常恢复以 Recovery Skill 为唯一权威。

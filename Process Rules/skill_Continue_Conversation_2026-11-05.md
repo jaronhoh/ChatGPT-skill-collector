@@ -249,6 +249,6 @@ updated: '2026-11-07'
 
 - 导出时优先保存用户**最新有效目标、最终验收、明确取消/不再需要的工作**及其时间与证据等级；历史计划不得覆盖较新的用户决定。
 - 在交接 JSON 的现有结构中记录（可放入现有决策、任务和风险字段）：`current_goal`、`user_confirmed_outcome`、`cancelled_or_not_planned`、`remaining_scope`、`unverified_claims`、`blockers_and_required_capabilities`；保持原 Schema 兼容，不强制改写既有字段。
-- 恢复时先核对这些最新决定，再决定下一步；「用户确认功能可用，无需部署」意味着不重启已取消的 GitHub→Sites 发布任务。
-- 分别保留 GitHub/PR、精确 Head CI、Sites 发布、Sites 源码映射和用户功能验收状态，证据标为 GitHub verified、Sites verified、Work reported、User confirmed 或 Not verified。
-- 同一工具缺口没有新证据时，不在新聊天重复发送同质 Work 指令；只问一个真正影响下一步的问题。
+- 恢复时先核对这些最新决定，再决定下一步；「用户确认功能可用，无需部署」意味着不重启已取消的发布任务。
+- 分别保留 GitHub/PR、精确 Head CI、已核实的实际发布状态及用户功能验收；证据标为 Verified、User reported 或 Not verified。
+- 同一工具缺口没有新证据时，不在新聊天重复发送同质交接指令；只问一个真正影响下一步的问题。

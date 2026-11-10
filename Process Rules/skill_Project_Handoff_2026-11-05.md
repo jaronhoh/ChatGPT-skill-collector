@@ -41,7 +41,7 @@ If the project already has an equivalent file, **reuse it** rather than creating
 3. **Cross-check live evidence** where tools allow: current branch/HEAD, open PRs, recent commits, CI test runs, and relevant deployment details.
 4. **Distinguish evidence levels** for each assertion:
    - `GitHub verified` — directly checked in repository/PR/CI.
-   - `Production verified` — directly checked using a Sites management/deployment tool.
+   - `Production verified` — directly checked using an authorized production management tool.
    - `User reported` — explicitly supplied by the user, not independently verified.
    - `Not verified` — evidence missing or tool access unavailable.
 5. **Detect discrepancies** between the status file, GitHub, production evidence, and user reports. Explain them; do not silently overwrite a newer fact with an older one.
@@ -168,7 +168,7 @@ Never claim that a status file was updated unless a repository write succeeded.
 
 ## 11. Ready-to-use handoff instruction
 
-> 请先读取当前项目 GitHub 默认分支的 `docs/PROJECT_STATUS.md`，并检查最新 Commit、PR、CI 测试及 生产发布状态。以该文件作为跨对话交接的主要记录，但须与实时证据核对。区分 GitHub 已验证、Sites 已验证、用户报告及未验证的状态。当项目明确使用该状态文件且发生实质里程碑变化时，更新同一份 `PROJECT_STATUS.md` 并追加 Change Log；保留历史记录、现有网站、数据、配置及访问权限。若工具无法读取或写入，请明确说明，不得假装完成。
+> 请先读取当前项目 GitHub 默认分支的 `docs/PROJECT_STATUS.md`，并检查最新 Commit、PR、CI 测试及生产发布状态。以该文件作为跨对话交接的主要记录，但须与实时证据核对。区分 GitHub 已验证、生产已验证、用户报告及未验证的状态。当项目明确使用该状态文件且发生实质里程碑变化时，更新同一份 `PROJECT_STATUS.md` 并追加 Change Log；保留历史记录、现有网站、数据、配置及访问权限。若工具无法读取或写入，请明确说明，不得假装完成。
 
 ## 12. Completion checklist
 
@@ -186,7 +186,7 @@ Never claim that a status file was updated unless a repository write succeeded.
 - **业务结果优先**：交接前确认当前用户目标和终点是文档/代码更新、GitHub 合并、现有 Site 功能验收还是新版本发布。用户确认现有 Site 已满足且无需额外发布时，将额外部署标记 Not Planned，不继续发布；保留历史尝试。
 - **五维状态独立记录**：① Requirement / Functional acceptance（Pending / User confirmed / Tested）；② GitHub Code / PR（Branch / Ready / Merged）；③ Automated CI（Passed / Failed / Not checked，附精确 Head 的 Actions Run）；④ Production deployment（Deployed / Not deployed / Not requested / Unknown）；⑤ Production source mapping（Verified / Unverified / Unsupported）。不得以 Merged 推导 Deployed，也不得以 User confirmed 推导源 SHA 匹配。
 - **证据等级**：GitHub verified、Production verified、External report、User confirmed、Not verified。Work 转述不得写作本聊天独立验证；只读 D1 行数/快照不等于可恢复备份。
-- **SHA 边界**：分别记录 GITHUB_HEAD_SHA、GITHUB_MERGE_SHA、PRODUCTION_SOURCE_SHA、PRODUCTION_DEPLOYMENT_VERSION；旧 Sites SHA 不在 GitHub 中只说明映射未核实，不足以断言绑定错误。
+- **SHA 边界**：分别记录 GITHUB_HEAD_SHA、GITHUB_MERGE_SHA、PRODUCTION_SOURCE_SHA、PRODUCTION_DEPLOYMENT_VERSION；旧生产源码 SHA 不在 GitHub 中只说明映射未核实，不足以断言绑定错误。
 - **阻塞收敛**：每项只记录缺失操作、已试工具及实际错误、可完成部分、需要的权限/能力、用户是否仍需此操作。无新证据不得重复交接；用户变更目标立即重算剩余范围。
 - **状态收尾**：在 PROJECT_STATUS.md 顶部呈现最新有效结论，旧尝试保留在追加日志。取消额外发布可将专用 Issue 标记 Not Planned，但不能伪称已部署或已完成尚未验证的安全/移动端/备份检查。
 

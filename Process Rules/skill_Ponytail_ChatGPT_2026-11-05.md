@@ -59,9 +59,8 @@ updated: '2026-11-07'
 
 - **ChatGPT 聊天**：分析、设计最小方案、生成代码片段、审查用户提供的 diff、制定测试和修复步骤。
 - **GitHub 连接器**（若已授权）：在实际权限范围内读取仓库、diff、PR；写入仅在工具允许且用户要求时进行。
-- **Codex（如已授权）**：可作为 Chat 主导的独立代码执行端。**Work** 仅在用户要求 Sites 部署时通过当前 Chat 输出部署指令；不得转交开发或测试。
-- **ChatGPT Sites**：如项目要求发布到 Sites，先验证其实际运行环境和依赖兼容性；GitHub 合并不等于 Sites 已部署。
-- 对新 Web 项目，如其他项目 Skill 已约定优先 shadcn/ui 和 Sites，继续遵守；**Ponytail 只负责减少不必要复杂度，不擅自覆盖用户已确定的架构、UI 和发布要求**。
+- **Codex（如已授权）**：可作为 Chat 主导的独立代码执行端。GitHub 更新在 Chat 中使用授权 Connector；不主动要求 Work。
+- 对新 Web 项目，如其他项目 Skill 已约定优先 shadcn/ui，继续遵守；**Ponytail 只负责减少不必要复杂度，不擅自覆盖用户已确定的架构、UI 和发布要求**。
 
 ## 6. Ponytail Review — 审查本次改动
 

@@ -7,6 +7,13 @@ upstream: https://github.com/GoogleChrome/modern-web-guidance
 upstream-reviewed-commit: 2b4aa13a72dd47cd135b06ce5abfccd92e19b24f
 upstream-package-at-review: '1.0.2'
 license: Apache-2.0
+source_type: 'adapted'
+original_author: 'GoogleChrome'
+source_url: 'https://github.com/GoogleChrome/modern-web-guidance'
+source_status: 'verified'
+source_audit_date: '2026-11-25'
+upstream_version: '1.0.2'
+upstream_commit: '2b4aa13a72dd47cd135b06ce5abfccd92e19b24f'
 ---
 
 # Modern Web Guidance — ChatGPT 适配 Skill

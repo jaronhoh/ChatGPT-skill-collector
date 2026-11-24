@@ -10,6 +10,9 @@ original_author: 'XiaoDuoYa'
 source_url: 'https://github.com/XiaoDuoYa/codex-with-chatgpt'
 source_status: 'matching_upstream_original_archive_unverified'
 source_audit_date: '2026-11-25'
+upstream_version: null
+upstream_commit: null
+license: MIT
 ---
 
 # Codex with ChatGPT — ChatGPT 端 Skill

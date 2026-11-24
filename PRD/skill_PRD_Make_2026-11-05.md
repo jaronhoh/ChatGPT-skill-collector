@@ -3,6 +3,11 @@ name: prd-make
 description: 用户要求从已确认产品方案编写或续写正式 PRD 时使用。
 version: '2.0'
 updated: '2026-11-07'
+source_type: 'unknown'
+original_author: 'unknown'
+source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/PRD/skill_PRD_Make_2026-11-05.md'
+source_status: 'local_history_only'
+source_audit_date: '2026-11-25'
 ---
 
 # PRD Make

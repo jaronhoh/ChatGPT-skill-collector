@@ -1,16 +1,20 @@
 ---
 name: enterprise-system-design
 description: 用户要求企业系统架构设计、设计文档或跨模块方案评审时使用。
-version: '2.0'
+version: '2.1'
 created: '2026-11-05'
-updated: '2026-11-07'
+updated: '2026-11-25'
 language: zh-CN
 scope: framework-agnostic
-source_type: 'adapted'
+source_type: 'derived'
 original_author: 'NocoBase (methodology reference)'
 source_url: 'https://github.com/nocobase/nocobase'
 source_status: 'documented_reference_not_direct_skill'
 source_audit_date: '2026-11-25'
+license_status: upstream_repository_NOASSERTION
+upstream_version: null
+upstream_commit: null
+license: null
 ---
 
 # Enterprise System Design — 通用系统设计与交付规范
@@ -60,7 +64,7 @@ source_audit_date: '2026-11-25'
 - **实现参考**：框架官方文档、版本匹配的开发 Skill、接口规范、示例和迁移手册。
 - **状态记录**：实际测试、GitHub SHA、部署版本、验收结果和未解决风险。
 
-**引用链追踪是强制方法**：阅读入口文件后，必须根据当前任务继续阅读其链接的其他 Markdown / 文档（包括二级及更深的任务相关引用），直到找到可执行约束。不能只读 `AGENTS.md` 的目录标题就声称理解完整规范。
+**按需追踪引用**：只读取当前任务所需的直接文档；仅在缺少关键约束时追踪相关深层引用，找到足够依据即停止。不能仅凭目录标题声称理解规范。
 
 仅追踪与任务有关的文档；不要每次通读全仓库。读取失败、版本不一致、链接不存在时明确记录未验证。**不得把参考项目的专属命令、目录、接口和上游贡献流程自动移植到其他系统**。
 

@@ -3,6 +3,11 @@ name: project-handoff
 description: 用户明确要求读取、更新项目状态或准备项目交接时使用。
 version: '2.0'
 updated: '2026-11-07'
+source_type: 'unknown'
+original_author: 'unknown'
+source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md'
+source_status: 'local_history_only'
+source_audit_date: '2026-11-25'
 ---
 
 # Skill — Project Progress, Release Tracking & Cross-Conversation Handoff

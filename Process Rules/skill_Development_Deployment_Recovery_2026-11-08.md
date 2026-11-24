@@ -1,18 +1,21 @@
 ---
 name: development-deployment-recovery
 description: 开发、GitHub、CI、测试和网络故障的恢复及断点续跑；不包含 Sites 部署。
-version: '4.1'
-updated: '2026-11-10'
+version: '4.2'
+updated: '2026-11-25'
 source_type: 'original'
 original_author: 'ChatGPT-skill-collector'
 source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md'
 source_status: 'local_rewrite_external_ancestry_unverified'
 source_audit_date: '2026-11-25'
+upstream_version: null
+upstream_commit: null
+license: null
 ---
 
 # Development Recovery — Evidence-Based Resume
 
-> Historical filename is retained to avoid breaking existing references. This Skill does **not** manage ChatGPT Sites publishing or production deployment. Global Chat-only GitHub policy: `../../AGENTS.md`.
+> Historical filename is retained to avoid breaking existing references. This Skill does **not** manage ChatGPT Sites publishing or production deployment. Global Chat-only GitHub policy: `../AGENTS.md`.
 
 ## 1. Activate only for a real failure
 Record task endpoint, failed stage, actual tool/environment/hostname, operation, error class, authorization state, exact GitHub SHA, last successful checkpoint and next safe action. Classify **authentication / DNS / missing checkout / connector / code / dependency / CI / test environment**. A failed tool route does not mean all routes are blocked.

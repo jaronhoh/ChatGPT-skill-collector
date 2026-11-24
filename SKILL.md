@@ -1,11 +1,14 @@
 ---
 name: skill-collector-router
 description: 按明确任务选择远程 Skill；GitHub-only 使用当前 Chat；不包含 ChatGPT Sites 部署流程。
-version: '4.2'
+version: '4.3'
 updated: '2026-11-25'
+source_type: original
+original_author: ChatGPT-skill-collector
+source_url: https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/SKILL.md
 ---
 
-# Skill Collector — Minimal Router v4.2
+# Skill Collector — Minimal Router v4.3
 
 只按用户明确的交付目标加载对应 Skill；普通 GitHub 操作、后端代码修改与测试无需加载专项 Skill。Web 前端 UI / CSS / 浏览器端 JS 开发或审查可按需加载 Modern Web Guidance。必须实际读取匹配文件，记录路径与版本；无法读取时如实报告。
 
@@ -29,3 +32,8 @@ updated: '2026-11-25'
 - 只有真实开发/GitHub/CI/测试故障才加载 Recovery。
 - 远程读取失败须分类错误；最多一次有依据的安全重试。不要凭摘要假装已加载。
 - `main` 是可变版本；可复现任务记录 GitHub Commit SHA。Project 上传版本不会自动同步。
+
+## Skill 来源维护（仅创建或升级 Skill 时适用）
+- 每个 Skill 的 front matter 保留 source_type、original_author、source_url、source_status、source_audit_date；外部来源有可核实版本或 SHA 时记录 upstream_version / upstream_commit。
+- 来源不明时标记 unknown；本仓库 URL 仅代表本地维护地址，不冒充原始出处。候选上游需明确标注未确认的历史关联。
+- 升级时查阅已记录上游、许可证及变更差异，保留本地适配约束；不盲目覆盖、不自动更新、不在普通开发时触发来源审计。

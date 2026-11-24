@@ -5,6 +5,11 @@ version: '2.0'
 created: '2026-10-18'
 source: '用户上传的 codex-with-chatgpt-main.zip：skill/SKILL.md、README.md、README.zh-CN.md'
 updated: '2026-11-07'
+source_type: 'adapted'
+original_author: 'XiaoDuoYa'
+source_url: 'https://github.com/XiaoDuoYa/codex-with-chatgpt'
+source_status: 'matching_upstream_original_archive_unverified'
+source_audit_date: '2026-11-25'
 ---
 
 # Codex with ChatGPT — ChatGPT 端 Skill

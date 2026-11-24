@@ -8,6 +8,11 @@ trigger_keywords:
   - 对话交接 JSON
   - 继续对话
 updated: '2026-11-07'
+source_type: 'original'
+original_author: 'ChatGPT / user prompt'
+source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/Process%20Rules/skill_Continue_Conversation_2026-11-05.md'
+source_status: 'documented_user_prompt'
+source_audit_date: '2026-11-25'
 ---
 
 # Continue Conversation — 长对话无损优先交接 Skill

@@ -1,18 +1,20 @@
 ---
 name: ponytail-chatgpt
-version: '2.0'
+version: '2.1'
 created: "2026-10-24"
 language: zh-CN
 description: 用户明确指定 Ponytail 模式、Ponytail 审查或技术债分析时使用。
 trigger_keywords: ["ponytail", "ponytail-review", "ponytail-audit", "ponytail-debt", "ponytail-gain", "ponytail-help"]
 source: "用户上传 ponytail-main.zip；参考 skills/ponytail、ponytail-review、ponytail-audit、ponytail-debt、ponytail-gain、ponytail-help，以及 README 与 AGENTS.md"
-license: MIT (upstream)
-updated: '2026-11-07'
+license: MIT
+updated: '2026-11-25'
 source_type: 'adapted'
 original_author: 'Dietrich Gebert'
 source_url: 'https://github.com/DietrichGebert/ponytail'
 source_status: 'documented_upstream'
 source_audit_date: '2026-11-25'
+upstream_version: null
+upstream_commit: null
 ---
 
 # Ponytail — ChatGPT Project 单文件 Skill
@@ -28,7 +30,7 @@ source_audit_date: '2026-11-25'
 - `ponytail` / `ponytail full`：默认模式。完成最小但完整的改动，并提供必要测试。
 - `ponytail lite`：完成用户要求，额外用一句话指出更小的备选方案，由用户选择。
 - `ponytail ultra`：先检查需求中是否有不必要部分；有充分理由时明确建议删减，再实施真正需要的部分。
-- `ponytail off` / `停止 ponytail` / `normal mode`：在当前聊天中停止应用该模式。
+- `ponytail off` / `停止 ponytail` / 已启用 Ponytail 时的 `normal mode`：在当前聊天中停止应用该模式。
 - 模式只在当前会话可访问上下文内有效；**上传 MD 不等于安装原插件、注册真正的斜杠命令或保证跨会话记住状态**。
 - 原项目使用 `/ponytail` 等命令；在 ChatGPT 中这些只是可输入的文本触发词，并非保证存在的内建命令。
 
@@ -69,7 +71,7 @@ source_audit_date: '2026-11-25'
 
 ## 6. Ponytail Review — 审查本次改动
 
-触发：`ponytail-review`、`review my PR`、`审查代码`、`是否过度设计`。
+触发：`ponytail-review` 或明确指定 Ponytail 的代码审查。
 
 默认审查未提交修改；若无则审查最新提交（仅在实际可读取仓库时）；用户指定 PR、分支或文件时以指定范围为准。
 
@@ -82,7 +84,7 @@ source_audit_date: '2026-11-25'
 
 ## 7. Ponytail Audit — 全仓质量审计
 
-触发：`ponytail-audit`、`审计整个仓库`、`找出冗余代码`。
+触发：`ponytail-audit` 或明确指定 Ponytail 的全仓审计。
 
 - 用户指定目录/包则按范围审计；未指定则以整个仓库为目标。
 - 先梳理 README、构建与部署配置、依赖、入口、路由、后台任务、测试、输入→存储→输出路径。
@@ -93,7 +95,7 @@ source_audit_date: '2026-11-25'
 
 ## 8. Ponytail Debt — 捷径债务清单
 
-触发：`ponytail-debt`、`有哪些 shortcut`、`列出技术债`。
+触发：`ponytail-debt` 或明确指定 Ponytail 的技术债分析。
 
 - 在可访问的源码中搜索**代码注释**的 `shortcut:` 和旧格式 `ponytail:`；忽略 `.gitignore` 排除的依赖、缓存和构建产物。
 - 逐项列出：`文件:行号 — 简化了什么；上限；触发升级的条件`。

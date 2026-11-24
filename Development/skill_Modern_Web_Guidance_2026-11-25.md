@@ -1,11 +1,9 @@
 ---
 name: modern-web-guidance-adapter
 description: 在明确执行 HTML/CSS/浏览器端 JavaScript、Web UI、无障碍、前端性能或浏览器兼容性相关开发与审查时，按需查询 GoogleChrome Modern Web Guidance；不用于后端、GitHub-only、部署、CI 配置或无关任务。
-version: '1.0'
+version: '1.1'
 created: '2026-11-25'
 upstream: https://github.com/GoogleChrome/modern-web-guidance
-upstream-reviewed-commit: 2b4aa13a72dd47cd135b06ce5abfccd92e19b24f
-upstream-package-at-review: '1.0.2'
 license: Apache-2.0
 source_type: 'adapted'
 original_author: 'GoogleChrome'
@@ -32,11 +30,11 @@ upstream_commit: '2b4aa13a72dd47cd135b06ce5abfccd92e19b24f'
 **A. 有获授权的 Node.js 22+、网络及命令执行环境**：可以按上游文档使用 CLI，而不是声称 ChatGPT 内置了该 CLI。
 
 ```sh
-npx -y modern-web-guidance@latest search "responsive data table"
-npx -y modern-web-guidance@latest retrieve "<actual-guide-id>"
+npx -y modern-web-guidance@1.0.2 search "responsive data table"
+npx -y modern-web-guidance@1.0.2 retrieve "<actual-guide-id>"
 ```
 
-- 搜索词：单一 Web 能力，英文 2–5 词；不要混入应用名或框架名。先 `search`，读取结果 description，选择相关 ID 再 `retrieve`；弱匹配仅允许改写搜索一次。
+- 可复现任务锁定已核实版本；升级时先核实版本与 CLI 参数。搜索词：单一 Web 能力，英文 2–5 词；不要混入应用名或框架名。先 `search`，读取结果 description，选择相关 ID 再 `retrieve`；弱匹配仅允许改写搜索一次。
 - 安装/运行只在工具、权限及环境许可时进行。不得扩大 npx 通用权限或强行要求用户安装 Node。工具返回的 ID、版本、实际正文才算已检索成功。
 
 **B. 当前 Chat 无 CLI，但可读取 GitHub**：使用当前 GitHub Connector 从上游读取源 Skill 及**相关**指南；此方式不能假装执行了 CLI search，也不保证找到了完整的最新指南索引。

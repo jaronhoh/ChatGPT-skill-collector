@@ -6,6 +6,11 @@ created: '2026-11-05'
 updated: '2026-11-07'
 language: zh-CN
 scope: framework-agnostic
+source_type: 'adapted'
+original_author: 'NocoBase (methodology reference)'
+source_url: 'https://github.com/nocobase/nocobase'
+source_status: 'documented_reference_not_direct_skill'
+source_audit_date: '2026-11-25'
 ---
 
 # Enterprise System Design — 通用系统设计与交付规范

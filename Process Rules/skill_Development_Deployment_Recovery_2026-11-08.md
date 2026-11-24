@@ -3,6 +3,11 @@ name: development-deployment-recovery
 description: 开发、GitHub、CI、测试和网络故障的恢复及断点续跑；不包含 Sites 部署。
 version: '4.1'
 updated: '2026-11-10'
+source_type: 'original'
+original_author: 'ChatGPT-skill-collector'
+source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md'
+source_status: 'local_rewrite_external_ancestry_unverified'
+source_audit_date: '2026-11-25'
 ---
 
 # Development Recovery — Evidence-Based Resume

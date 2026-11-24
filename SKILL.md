@@ -1,13 +1,13 @@
 ---
 name: skill-collector-router
 description: 按明确任务选择远程 Skill；GitHub-only 使用当前 Chat；不包含 ChatGPT Sites 部署流程。
-version: '4.1'
-updated: '2026-11-10'
+version: '4.2'
+updated: '2026-11-25'
 ---
 
-# Skill Collector — Minimal Router v4.1
+# Skill Collector — Minimal Router v4.2
 
-只按用户明确的交付目标加载对应 Skill；普通 GitHub 操作、代码修改与测试无需加载专项 Skill。必须实际读取匹配文件，记录路径与版本；无法读取时如实报告。
+只按用户明确的交付目标加载对应 Skill；普通 GitHub 操作、后端代码修改与测试无需加载专项 Skill。Web 前端 UI / CSS / 浏览器端 JS 开发或审查可按需加载 Modern Web Guidance。必须实际读取匹配文件，记录路径与版本；无法读取时如实报告。
 
 | 明确意图 | 远程 Skill |
 |---|---|
@@ -15,6 +15,7 @@ updated: '2026-11-10'
 | 用户要求创建/续写正式 PRD | [PRD Make](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/PRD/skill_PRD_Make_2026-11-05.md) |
 | 用户明确使用 C2C 连接工作流 | [Codex with ChatGPT](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Codex_With_ChatGPT_2026-11-05.md) |
 | 明确导出/恢复对话 JSON，或单独说「继续对话」 | [Continue Conversation](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Continue_Conversation_2026-11-05.md) |
+| 明确涉及 HTML/CSS、浏览器端 JavaScript、Web UI、响应式布局、前端性能或无障碍的实际开发与审查（不含纯后端/部署） | [Modern Web Guidance — Adapter](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Development/skill_Modern_Web_Guidance_2026-11-25.md) |
 | 实际发生开发、GitHub、CI 或测试故障，要求恢复/断点续跑 | [Development Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
 | 明确要求 Ponytail review/audit/debt | [Ponytail](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) |
 | 明确查询/更新项目状态或跨项目交接 | [Project Handoff](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md) |
@@ -22,6 +23,7 @@ updated: '2026-11-10'
 
 ## Negative routing
 - GitHub-only → 当前 Chat 使用 GitHub Connector；不询问 Work、不自动部署。
+- Modern Web Guidance 仅在相关 Web 前端实现/审查时加载；其上游 CLI 不是 Chat 内置工具，不能假装执行 search/retrieve；不将其规则全局强制到其他专业任务。
 - 仅因文件正文、仓库名或历史聊天提到部署，不触发发布流程。
 - 本路由**不提供 ChatGPT Sites 部署 Skill**；用户要求 Sites 时不得从本仓库虚构发布步骤或自动交接。
 - 只有真实开发/GitHub/CI/测试故障才加载 Recovery。

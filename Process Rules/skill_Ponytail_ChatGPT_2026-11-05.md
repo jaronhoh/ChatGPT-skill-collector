@@ -8,6 +8,11 @@ trigger_keywords: ["ponytail", "ponytail-review", "ponytail-audit", "ponytail-de
 source: "用户上传 ponytail-main.zip；参考 skills/ponytail、ponytail-review、ponytail-audit、ponytail-debt、ponytail-gain、ponytail-help，以及 README 与 AGENTS.md"
 license: MIT (upstream)
 updated: '2026-11-07'
+source_type: 'adapted'
+original_author: 'Dietrich Gebert'
+source_url: 'https://github.com/DietrichGebert/ponytail'
+source_status: 'documented_upstream'
+source_audit_date: '2026-11-25'
 ---
 
 # Ponytail — ChatGPT Project 单文件 Skill

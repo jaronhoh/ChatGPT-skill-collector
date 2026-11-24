@@ -3,6 +3,11 @@ name: pm-make
 description: 将用户明确要求梳理的产品想法整理成产品定型稿时使用。
 version: '2.0'
 updated: '2026-11-07'
+source_type: 'unknown'
+original_author: 'unknown'
+source_url: 'https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/PRD/skill_PM_Make_2026-11-05.md'
+source_status: 'local_history_only'
+source_audit_date: '2026-11-25'
 ---
 
 # PM Make

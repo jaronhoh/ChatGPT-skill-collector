@@ -9,9 +9,11 @@ source_url: 'https://github.com/IMinnn/PRD-Make-SKILL/blob/main/pm-make/SKILL.md
 source_status: 'upstream_verified_local_adaptation'
 source_audit_date: '2026-11-25'
 upstream_repository: 'https://github.com/IMinnn/PRD-Make-SKILL'
-upstream_commit_reviewed: '1dc0aa489f2138f92996bba5fdbade96edf362ce'
+upstream_commit: '1dc0aa489f2138f92996bba5fdbade96edf362ce'
 upstream_file_blob_reviewed: '85a07bb34c0c2858334e0332c020d599efb5a65e'
-upstream_version: 'unversioned-at-review'
+upstream_version: null
+license: null
+license_status: upstream_repository_license_not_declared
 ---
 
 # PM Make

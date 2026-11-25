@@ -1,6 +1,6 @@
 # Skill Collector — Maintenance Index
 
-Human-maintained index; not an automatically loaded Skill. Root AGENTS.md governs execution and SKILL.md routes tasks. Snapshot: 2026-11-25. Null means unknown or not applicable, not permission to redistribute.
+Human-maintained index; not an automatically loaded Skill. Root AGENTS.md governs execution and SKILL.md routes tasks. Snapshot: 2026-11-26. Null means unknown or not applicable, not permission to redistribute.
 
 | Skill | Local version | Type | Source | Upstream version | Reviewed commit | Upstream license |
 |---|---|---|---|---|---|---|
@@ -13,6 +13,9 @@ Human-maintained index; not an automatically loaded Skill. Root AGENTS.md govern
 | [ponytail-chatgpt](Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) | 2.1 | adapted | [Dietrich Gebert](https://github.com/DietrichGebert/ponytail) | null | — | MIT |
 | [project-handoff](Process%20Rules/skill_Project_Handoff_2026-11-05.md) | 3.0 | unknown | [unknown](https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md) | null | — | null |
 | [enterprise-system-design](System%20Design/skill_Enterprise_System_Design_2026-11-05.md) | 2.1 | derived | [NocoBase (methodology reference)](https://github.com/nocobase/nocobase) | null | — | null |
+
+## Deployment references
+- [Historical deployment reports](References/Sites%20Deployment%20Retrospectives/README.md): reference-only routing in SKILL.md v4.5 for actual Sites deployment failures or explicit historical review; not a deployment Skill.
 
 ## Maintenance
 - Update this index when changing versions or provenance. Skill front matter is authoritative.

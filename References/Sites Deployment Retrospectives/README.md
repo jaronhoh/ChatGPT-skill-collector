@@ -13,3 +13,4 @@
 | 日期 | 项目 / 问题 | 参考记录 |
 |---|---|---|
 | 2026-11-10 | Margin Share Calculator — `excelCheck` 初始化报错、Version 10 → 11、GitHub 与 Sites 源码快照测试差异 | [复盘记录](2026-11-10-Margin-Share-Calculator-excelCheck.md) |
+| 2026-11-26 | Loan Investment Calculator — FR-21/FR-22 四案例比较、审批超时、网络权限及恢复经验（报告转述，非独立验证） | [综合复盘](2026-11-26-Loan-Investment-Calculator-FR21-FR22-Deployment-Analysis.md) |

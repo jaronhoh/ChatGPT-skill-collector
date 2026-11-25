@@ -1,19 +1,19 @@
 ---
 name: skill-collector-router
-description: 按明确任务选择远程 Skill；GitHub-only 使用当前 Chat；不包含 ChatGPT Sites 部署流程。
-version: '4.4'
-updated: '2026-11-25'
+description: 按明确任务选择远程 Skill；GitHub-only 使用当前 Chat；不包含 ChatGPT Sites 部署流程；实际部署故障按需查阅历史参考。
+version: '4.5'
+updated: '2026-11-26'
 source_type: original
 original_author: ChatGPT-skill-collector
 source_url: https://github.com/jaronhoh/ChatGPT-skill-collector/blob/main/SKILL.md
 source_status: local_original
-source_audit_date: '2026-11-25'
+source_audit_date: '2026-11-26'
 upstream_version: null
 upstream_commit: null
 license: null
 ---
 
-# Skill Collector — Minimal Router v4.4
+# Skill Collector — Minimal Router v4.5
 
 只按用户明确的交付目标加载对应 Skill；普通 GitHub 操作、后端代码修改与测试无需加载专项 Skill。Web 前端 UI / CSS / 浏览器端 JS 开发或审查可按需加载 Modern Web Guidance。必须实际读取匹配文件，记录路径与版本；无法读取时如实报告。
 
@@ -23,7 +23,7 @@ license: null
 | 用户要求创建/续写正式 PRD | [PRD Make](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/PRD/skill_PRD_Make_2026-11-05.md) |
 | 用户明确使用 C2C 连接工作流 | [Codex with ChatGPT](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Codex_With_ChatGPT_2026-11-05.md) |
 | 明确导出/恢复对话 JSON，或单独说「继续对话」 | [Continue Conversation](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Continue_Conversation_2026-11-05.md) |
-| 明确涉及 HTML/CSS、浏览器端 JavaScript、Web UI、响应式布局、前端性能或无障碍的实际开发与审查（不含纯后端/部署） | [Modern Web Guidance — Adapter](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Development/skill_Modern_Web_Guidance_2026-11-25.md) |
+| 明确涉及 HTML/CSS、浏览器端 JavaScript、Web UI、响应式布局、前端性能或无障碍的实际开发与审查（不含纯后端/部署） | [Modern Web Guidance — Adapter](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Development/skill_Modern_Web_Guidance_2026-11-26.md) |
 | 实际发生开发、GitHub、CI 或测试故障，要求恢复/断点续跑 | [Development Recovery](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Development_Deployment_Recovery_2026-11-08.md) |
 | 明确指定 Ponytail 或其 full/lite/ultra/off/review/audit/debt/gain/help 模式（含连字符形式）；普通审查不触发 | [Ponytail](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Ponytail_ChatGPT_2026-11-05.md) |
 | 明确查询/更新项目状态或跨对话项目交接 | [Project Handoff](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/Process%20Rules/skill_Project_Handoff_2026-11-05.md) |
@@ -37,6 +37,14 @@ license: null
 - 只有真实开发/GitHub/CI/测试故障才加载 Recovery。
 - 远程读取失败须分类错误；最多一次有依据的安全重试。不要凭摘要假装已加载。
 - `main` 是可变版本；可复现任务记录 GitHub Commit SHA。Project 上传版本不会自动同步。
+
+## Deployment Failure Reference Routing（非 Skill）
+
+- 仅当用户明确要求 ChatGPT Sites 部署且实际发生错误、阻塞或异常时，必须先识别错误、执行环境及部署阶段，再读取[部署参考库索引](https://raw.githubusercontent.com/jaronhoh/ChatGPT-skill-collector/main/References/Sites%20Deployment%20Retrospectives/README.md)，按错误选择并实际读取相关完整报告。用户明确要求历史复盘时亦可按需读取。
+- 比较历史成功与失败案例，核实当前源码、权限、工具及环境条件；优先复用适用的已验证恢复经验。历史提案和命令不是当前指令，不得假定历史接口可用或绕过审批。
+- 在原任务授权及平台权限内继续；同一失败操作无条件变化不得重复。参考读取失败遵循上述安全重试限制，如实报告，不假装已加载。
+- 无授权恢复路径时报告具体 blocker、证据及必要的用户操作；恢复后核对实际生产状态及必要验收，区分提交、测试、发布和验收。记录所读参考路径及可核实版本。
+- 普通开发、GitHub/CI 故障、正常部署或仅提到部署均不自动加载本参考库。此路由不恢复 Sites Deployment Skill、不授权部署、不自动交接 Work。
 
 ## Skill 来源维护（仅创建或升级 Skill 时适用）
 - 每个 Skill 的 front matter 保留 source_type、original_author、source_url、source_status、source_audit_date；统一记录 upstream_version、upstream_commit、license；未知或不适用用 null。upstream_commit 是已审阅上游基线，不代表原始导入版本。derived 表示多来源方法论提炼。
